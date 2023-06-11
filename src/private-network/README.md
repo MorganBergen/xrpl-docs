@@ -9,15 +9,16 @@
 
 ##  prerequisites
 
-####  install docker
-####  install [rippled image](../rippled-image/README.md)
+####  1.  install docker
+####  2.  install [rippled image](../rippled-image/README.md)
 
-####  proceed with following the rippled validator key generation tool [`/rippled/validator-keys`](https://github.com/ripple/validator-keys-tool)
+####  3.  proceed with following the rippled validator key generation tool [`/rippled/validator-keys`](https://github.com/ripple/validator-keys-tool)
 
 1.  **dependencies**  validator key generator depends on the [`rippled`](https://github.com/ripple/rippled.git) repository for signing functionality.
 2.  **install** have a stable & local installation of rippled development files
+3.  **optional** point the [`rippled/validator-keys`](https://github.com/ripple/validator-keys-tool) at my installation using `CMAKE_PREFIX_PATH` parameter during the cmake configuration step. (not necessary because if there's no local path given then the validator key generator will fetch an appropriate version of the source code using cmake's fetchcontent)
+
 3.  **build** rippled
-4.  **optional** point the [`rippled/validator-keys`](https://github.com/ripple/validator-keys-tool) at my installation using `CMAKE_PREFIX_PATH` parameter during the cmake configuration step. (not necessary because if there's no local path given then the validator key generator will fetch an appropriate version of the source code using cmake's fetchcontent)
 
 -  C++14 or greater
 ```
@@ -50,6 +51,8 @@ Warning: Treating cmake as a formula. For the cask, use homebrew/cask/cmake
 Cross-platform make
 https://www.cmake.org/
 ```
+
+
 
 ###  build and run
 
