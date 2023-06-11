@@ -366,9 +366,18 @@ install cmake [cmake toolchain](https://cmake.org/cmake/help/latest/manual/cmake
 
 `brew install cmake`
 
+`cmake --version cmake version 3.26.4`
+
 install conan [conan profiles](https://docs.conan.io/1/reference/profiles.html)
 
 `brew install conan`
+
+`conan --version Conan version 2.0.6`
+
+####  `conan`
+
+
+
 
 3.  generate the keys for each of your validator nodes by using the [`validator-keys`](https://github.com/ripple/validator-keys-tool/blob/master/README.md) tool provided with `rippled`
 
