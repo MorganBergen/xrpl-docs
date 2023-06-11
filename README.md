@@ -4,7 +4,7 @@
 
 ### selected readings
 
-1.  [private ledger](./src/private-ledger/README.md)
+1.  [private ledger network](./src/private-network/README.md)
 
 ### Documentation
 
