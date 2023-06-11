@@ -7,10 +7,208 @@
 5.  [perform a test transaction](#perform-a-test-transaction)
 6.  [stop the network](#stop-the-network)
 
-###  prerequisites
+##  prerequisites
 
-- [ ]  install docker
-- [ ]  install [rippled image](../rippled-image/README.md)
+####  install docker
+####  install [rippled image](../rippled-image/README.md)
+
+####  proceed with following the rippled validator key generation tool [`/rippled/validator-keys`](https://github.com/ripple/validator-keys-tool)
+
+1.  **dependencies**  validator key generator depends on the [`rippled`](https://github.com/ripple/rippled.git) repository for signing functionality.
+2.  **install** have a stable & local installation of rippled development files
+3.  **build** rippled
+4.  **optional** point the [`rippled/validator-keys`](https://github.com/ripple/validator-keys-tool) at my installation using `CMAKE_PREFIX_PATH` parameter during the cmake configuration step. (not necessary because if there's no local path given then the validator key generator will fetch an appropriate version of the source code using cmake's fetchcontent)
+
+-  C++14 or greater
+```
+❯ c++ --version
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+```
+
+-  [Boost](https://formulae.brew.sh/formula/boost#default) - 1.70+ required
+```
+❯ brew info boost
+==> boost: stable 1.81.0 (bottled), HEAD
+Collection of portable C++ source libraries
+https://www.boost.org/
+```
+-  [OpenSSL](https://formulae.brew.sh/formula/openssl@3)
+```
+❯ brew info openssl@3
+==> openssl@3: stable 3.1.1 (bottled) [keg-only]
+Cryptography and SSL/TLS Toolkit
+https://openssl.org/
+```
+-  [cmake](https://formulae.brew.sh/formula/cmake) - 3.11+ required
+```
+❯ brew info cmake
+Warning: Treating cmake as a formula. For the cask, use homebrew/cask/cmake
+==> cmake: stable 3.26.4 (bottled), HEAD
+Cross-platform make
+https://www.cmake.org/
+```
+
+###  build and run
+
+0.  not necessary `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/rippled/installation/root ../..`
+
+1.  `cd /validator-keys-tools`
+2.  `mkdir -d build/gcc.debug`
+3.  `cd build/gcc.debug`
+4.  `cmake --build`
+5.  `./validator-keys`
+
+```
+❯ l
+total 88
+drwxr-xr-x  17 mbergen  staff   544B Jun 11 12:28 .
+drwxr-xr-x  10 mbergen  staff   320B Jun 11 12:18 ..
+drwxr-xr-x  12 mbergen  staff   384B Jun 11 12:29 .git
+-rw-r--r--   1 mbergen  staff   288B Jun  6 14:49 .gitignore
+drwxr-xr-x   3 mbergen  staff    96B Jun 11 12:28 .nih_c
+-rw-r--r--   1 mbergen  staff    15K Jun  6 14:49 .travis.yml
+drwxr-xr-x   3 mbergen  staff    96B Jun  6 14:49 Builds
+-rw-r--r--   1 mbergen  staff   3.1K Jun  6 14:49 CMakeLists.txt
+-rw-r--r--   1 mbergen  staff   3.3K Jun  6 14:49 LICENSE
+-rw-r--r--   1 mbergen  staff   2.2K Jun 11 11:45 README.md
+-rw-r--r--   1 mbergen  staff   686B Jun  6 14:49 RELEASENOTES.md
+-rw-r--r--   1 mbergen  staff   2.7K Jun  6 14:49 appveyor.yml
+drwxr-xr-x   3 mbergen  staff    96B Jun 11 12:28 build
+drwxr-xr-x   5 mbergen  staff   160B Jun  6 14:49 ci
+-rw-r--r--   1 mbergen  staff   1.8K Jun  6 14:49 circle.yml
+drwxr-xr-x   3 mbergen  staff    96B Jun  9 18:22 doc
+drwxr-xr-x   7 mbergen  staff   224B Jun  6 14:49 src
+
+~/Documents/Github/validator-keys-tool on master
+❯ mkdir -p build/gcc.debug
+❯ cd build/gcc.debug
+❯ cmake -DCMAKE_BUILD_TYPE=Release ../..
+-- The C compiler identification is AppleClang 14.0.3.14030022
+-- The CXX compiler identification is AppleClang 14.0.3.14030022
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Library/Developer/CommandLineTools/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Library/Developer/CommandLineTools/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- NIH-EP cache path: /Users/mbergen/Documents/Github/validator-keys-tool/.nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release
+-- Found Git: /usr/bin/git (found version "2.39.2 (Apple Git-143)")
+-- Installed rippled not found...       using local copy from tag/commit [master]
+-- Pausing to download rippled source...
+-- gch:c640d03010ca0a45b66c35427503e959ae1df255
+-- Using 4 cores for ExternalProject builds.
+-- rippled version: 1.10.1
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Found Boost: /opt/homebrew/lib/cmake/Boost-1.81.0/BoostConfig.cmake (found suitable version "1.81.0", minimum required is "1.70") found components: chrono container context coroutine date_time filesystem program_options regex system thread
+CMake Error at /opt/homebrew/Cellar/cmake/3.26.4/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the
+  system variable OPENSSL_ROOT_DIR (missing: OPENSSL_CRYPTO_LIBRARY
+  OPENSSL_INCLUDE_DIR) (Required is at least version "1.1.1")
+Call Stack (most recent call first):
+  /opt/homebrew/Cellar/cmake/3.26.4/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:600 (_FPHSA_FAILURE_MESSAGE)
+  /opt/homebrew/Cellar/cmake/3.26.4/share/cmake/Modules/FindOpenSSL.cmake:670 (find_package_handle_standard_args)
+  .nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release/rippled_src-src/CMakeLists.txt:70 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
+❯ l
+total 56
+drwxr-xr-x  4 mbergen  staff   128B Jun 11 12:37 .
+drwxr-xr-x  3 mbergen  staff    96B Jun 11 12:28 ..
+-rw-r--r--  1 mbergen  staff    24K Jun 11 12:37 CMakeCache.txt
+drwxr-xr-x  7 mbergen  staff   224B Jun 11 12:37 CMakeFiles
+```
+
+```
+  brew reinstall openssl@3
+❯ export OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+
+❯ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/lz4 ../..
+
+-- NIH-EP cache path: /Users/mbergen/Documents/Github/validator-keys-tool/.nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release
+-- Installed rippled not found...       using local copy from tag/commit [master]
+-- Pausing to download rippled source...
+-- gch:c640d03010ca0a45b66c35427503e959ae1df255
+-- Using 4 cores for ExternalProject builds.
+-- rippled version: 1.10.1
+CMake Error at .nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release/rippled_src-src/CMakeLists.txt:76 (find_package):
+  By not providing "Findlz4.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "lz4", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "lz4" with any of
+  the following names:
+
+    lz4Config.cmake
+    lz4-config.cmake
+
+  Add the installation prefix of "lz4" to CMAKE_PREFIX_PATH or set "lz4_DIR"
+  to a directory containing one of the above files.  If "lz4" provides a
+  separate development package or SDK, be sure it has been installed.
+
+
+-- Configuring incomplete, errors occurred!
+```
+
+
+
+> this should spit out a `.validator-keys` executable
+
+###  option 1 running a rippled container for `validator-keys` tool
+
+###  option 2 set up a validator  
+
+1.  `cd validator-keys-tool` 
+2.  `validator-keys create_keys`
+
+sample output:  `Validator keys stored in /home/ubuntu/.ripple/validator-keys.json`
+
+4.  `validator-keys createn_token`
+
+sample output:
+
+```
+  Update rippled.cfg file with these values:
+
+  # validator public key: nHUtNnLVx7odrz5dnfb2xpIgbEeJPbzJWfdicSkGyVw1eE5GpjQr
+
+  [validator_token]
+  eyJ2YWxpZGF0aW9uX3NlY3J|dF9rZXkiOiI5ZWQ0NWY4NjYyNDFjYzE4YTI3NDdiNT
+  QzODdjMDYyNTkwNzk3MmY0ZTcxOTAyMzFmYWE5Mzc0NTdmYT|kYWY2IiwibWFuaWZl
+  c3QiOiJKQUFBQUFGeEllMUZ0d21pbXZHdEgyaUNjTUpxQzlnVkZLaWxHZncxL3ZDeE
+  hYWExwbGMyR25NaEFrRTFhZ3FYeEJ3RHdEYklENk9NU1l1TTBGREFscEFnTms4U0tG
+  bjdNTzJmZGtjd1JRSWhBT25ndTlzQUtxWFlvdUorbDJWMFcrc0FPa1ZCK1pSUzZQU2
+  hsSkFmVXNYZkFpQnNWSkdlc2FhZE9KYy9hQVpva1MxdnltR21WcmxIUEtXWDNZeXd1
+  NmluOEhBU1FLUHVnQkQ2N2tNYVJGR3ZtcEFUSGxHS0pkdkRGbFdQWXk1QXFEZWRGdj
+  VUSmEydzBpMjFlcTNNWXl3TFZKWm5GT3I3QzBrdzJBaVR6U0NqSXpkaXRROD0ifQ==
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 - [ ]  generate the keys for each of your validator nodes by using the `validator-keys` tool provided with `rippled`
 
 ```
