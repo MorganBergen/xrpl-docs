@@ -56,5 +56,3 @@ the response is a ledger header of a specific ledger version, this ledger versio
   type: 'response'
 }
 ```
-
-

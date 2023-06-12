@@ -25,5 +25,3 @@
 - [History](#history)
 - [Ledger Explorer](#ledger-explorer)
 - [XRP Overview](#xrp-overview)
-
-

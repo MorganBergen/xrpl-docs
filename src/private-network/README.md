@@ -1,19 +1,30 @@
 ##  set up a private network with docker on local dev enviroment
 
+##  contents
 1.  [prerequisites](#prerequisites)
 2.  [pre configuration is incomplete, errors due to missing `Findlz4.cmake`](#pre-configuration-is-incomplete-errors-due-to-missing-findlz4-cmake)
 3.  [configure the network](#configure-the-network)
 4.  [start the network](#start-the-network)
+
+docker compose will let you manage multiple containers on your computer with a simple `yaml` file configuration.  thsi section describes how to run the network with docker compose 
+
 5.  [verify the network](#verify-the-network)
 6.  [perform a test transaction](#perform-a-test-transaction)
 7.  [stop the network](#stop-the-network)
+
+##  referenced
+1.  [quickstart](https://preview.redoc.ly/dcm-docs/xbs-1822-private-ledger/dcm/admin/private-network/quickstart/)
+2.  [rippled image XRPL node: `rippled` run a xrpl ledger node](https://hub.docker.com/r/xrpllabsofficial/xrpld)
+3.  [rippled/validator-keys-tool](https://github.com/ripple/validator-keys-tool)
 
 ##  prerequisites
 
 ####  1.  install docker
 ####  2.  install [rippled image](../rippled-image/README.md)
 
-####  3.  proceed with following the rippled validator key generation tool [`/rippled/validator-keys`](https://github.com/ripple/validator-keys-tool)
+####  3.  [build rippled from source](../build-rippled/README.md)
+
+####  4.  proceed with following the rippled validator key generation tool [`/rippled/validator-keys`](https://github.com/ripple/validator-keys-tool)
 
 1.  **dependencies**  validator key generator depends on the [`rippled`](https://github.com/ripple/rippled.git) repository for signing functionality.
 2.  **install** have a stable & local installation of rippled development files
@@ -134,7 +145,6 @@ brew reinstall openssl@3
 
 ```
 
-
 ###  pre configuration is incomplete, errors due to missing `Findlz4.cmake`
 
 ```
@@ -165,7 +175,6 @@ CMake Error at .nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release/rippled_
 -- Configuring incomplete, errors occurred!
 ```
 
-
 > this should spit out a `.validator-keys` executable
 
 ###  option 1 running a rippled container for `validator-keys` tool
@@ -188,11 +197,11 @@ sample output:
 
   [validator_token]
   eyJ2YWxpZGF0aW9uX3NlY3J|dF9rZXkiOiI5ZWQ0NWY4NjYyNDFjYzE4YTI3NDdiNT
-  QzODdjMDYyNTkwNzk3MmY0ZTcxOTAyMzFmYWE5Mzc0NTdmYT|kYWY2IiwibWFuaWZl
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXZl
   c3QiOiJKQUFBQUFGeEllMUZ0d21pbXZHdEgyaUNjTUpxQzlnVkZLaWxHZncxL3ZDeE
-  hYWExwbGMyR25NaEFrRTFhZ3FYeEJ3RHdEYklENk9NU1l1TTBGREFscEFnTms4U0tG
+  h5XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXExw1BGREFscEFnTms4U0tG
   bjdNTzJmZGtjd1JRSWhBT25ndTlzQUtxWFlvdUorbDJWMFcrc0FPa1ZCK1pSUzZQU2
-  hsSkFmVXNYZkFpQnNWSkdlc2FhZE9KYy9hQVpva1MxdnltR21WcmxIUEtXWDNZeXd1
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX21WcmxIUEtXWDNZeXd1
   NmluOEhBU1FLUHVnQkQ2N2tNYVJGR3ZtcEFUSGxHS0pkdkRGbFdQWXk1QXFEZWRGdj
   VUSmEydzBpMjFlcTNNWXl3TFZKWm5GT3I3QzBrdzJBaVR6U0NqSXpkaXRROD0ifQ==
 ```
