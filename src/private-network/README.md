@@ -52,8 +52,6 @@ Cross-platform make
 https://www.cmake.org/
 ```
 
-
-
 ###  build and run
 
 0.  not necessary `cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/rippled/installation/root ../..`
