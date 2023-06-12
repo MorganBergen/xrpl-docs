@@ -1,11 +1,12 @@
 ##  set up a private network with docker on local dev enviroment
 
 1.  [prerequisites](#prerequisites)
-2.  [configure the network](#configure-the-network)
-3.  [start the network](#start-the-network)
-4.  [verify the network](#verify-the-network)
-5.  [perform a test transaction](#perform-a-test-transaction)
-6.  [stop the network](#stop-the-network)
+2.  [pre configuration is incomplete, errors due to missing `Findlz4.cmake`](#pre-configuration-is-incomplete-errors-due-to-missing-findlz4-cmake)
+3.  [configure the network](#configure-the-network)
+4.  [start the network](#start-the-network)
+5.  [verify the network](#verify-the-network)
+6.  [perform a test transaction](#perform-a-test-transaction)
+7.  [stop the network](#stop-the-network)
 
 ##  prerequisites
 
@@ -127,12 +128,16 @@ drwxr-xr-x  4 mbergen  staff   128B Jun 11 12:37 .
 drwxr-xr-x  3 mbergen  staff    96B Jun 11 12:28 ..
 -rw-r--r--  1 mbergen  staff    24K Jun 11 12:37 CMakeCache.txt
 drwxr-xr-x  7 mbergen  staff   224B Jun 11 12:37 CMakeFiles
-```
-
-```
-  brew reinstall openssl@3
+    
+brew reinstall openssl@3
 ❯ export OPENSSL_ROOT_DIR=$(brew --prefix openssl)
 
+```
+
+
+###  pre configuration is incomplete, errors due to missing `Findlz4.cmake`
+
+```
 ❯ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/lz4 ../..
 
 -- NIH-EP cache path: /Users/mbergen/Documents/Github/validator-keys-tool/.nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release
@@ -159,7 +164,6 @@ CMake Error at .nih_c/unix_makefiles/AppleClang_14.0.3.14030022/Release/rippled_
 
 -- Configuring incomplete, errors occurred!
 ```
-
 
 
 > this should spit out a `.validator-keys` executable
