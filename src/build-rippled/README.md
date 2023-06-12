@@ -12,9 +12,9 @@ fetched `isl` [integer set library for the polyhedral model](https://libisl.sour
 fetched `mpfr` [c library for multiple-precision floating-point computations](https://www.mpfr.org/)
 Installing dependencies for gcc: gmp, isl, mpfr and libmpc
 
-4.  [clang 13 version]()
-5.  [apple clang]()
-6.  [msvc]()
+[clang 13 version]()
+[apple clang]()
+[msvc]()
 
 ##  contents
 
@@ -200,12 +200,34 @@ we have written a conan configuration file `conanfile.py` so that conan can be u
 
 the toolchain file itself amends the search path `CMAKE_PREFIX_PATH` so that `find_package()` will discover the generated package configuration files.
 
-all we must do to properly configure cmake is to pass the toolchiain file.
+all we must do to properly configure cmake is to pass the toolchiain file.????
 
 what cmake parameters are left out?  you still need to pick a build system generator and if you choose a single-configuration generated youll need to pass the `CMAKE_BUILD_TYPE`, which such match the `build_type` setting you have to conan.  even then conan has parameters some of which are platform specific.  if conan's parlance parameters are either settings or options.  settings are shared by all packages e.g. build type.  options are specific to a given package, whether to build and link OpenSSL as a shared library.
 
 for settings conan goes through a complicated search process to choose defaults.  for options each packaeg recipe define its own defaults.  you can pass every parameter to conan on the command line, but it more convenient to put them in a [profile](https://docs.conan.io/1/reference/profiles.html)
 
+###  install with pip 
+
+install with python package manager and not homebrew.
+conan will be installed globally 
+
+```
+❯ tree .conan2
+.conan2
+├── extensions
+│   └── plugins
+│       ├── compatibility
+│       │   ├── compatibility.py
+│       │   └── cppstd_compat.py
+│       └── profile.py
+├── global.conf
+├── p
+│   └── cache.sqlite3
+├── settings.yml
+└── version.txt
+
+5 directories, 7 files
+```
 
 ###  getting started
 
