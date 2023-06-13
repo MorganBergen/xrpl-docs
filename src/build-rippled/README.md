@@ -20,42 +20,6 @@
 -  <p class="red-text">do not use this -> conan</p> [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
 
 
-⚠️  problem may come from using the wrong version of conan - install v 1.59.0
-
-```
-❯ brew info conan@1
-==> conan@1: stable 1.60.1 (bottled) [keg-only]
-Distributed, open source, package manager for C/C++
-https://conan.io
-/opt/homebrew/Cellar/conan@1/1.60.1 (1,490 files, 16.2MB)
-  Poured from bottle using the formulae.brew.sh API on 2023-06-13 at 10:22:19
-From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb
-License: MIT
-==> Dependencies
-Build: pkg-config ✔
-Required: openssl@1.1 ✔, pygments ✔, python@3.11 ✔, pyyaml ✔, six ✔
-==> Caveats
-conan@1 is keg-only, which means it was not symlinked into /opt/homebrew,
-because this is an alternate version of another formula.
-
-If you need to have conan@1 first in your PATH, run:
-  echo 'export PATH="/opt/homebrew/opt/conan@1/bin:$PATH"' >> ~/.zshrc
-==> Analytics
-install: 0 (30 days), 8 (90 days), 8 (365 days)
-install-on-request: 0 (30 days), 8 (90 days), 8 (365 days)
-build-error: 0 (30 days)
-
-~/Documents/Github/rippled on master !1
-
-❯ echo 'export PATH"/opt/homebrew/conan@1/bin:$PATH"' >> ~/.zshrc
-
-
-~
-
-❯ source .zshrc
-
-.zshrc:export:116: not valid in this context: PATH/opt/homebrew/conan@1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
-```
 
 ##  contents
 
@@ -414,11 +378,9 @@ cmake --build .
 ./rippled --unittest
 ```
 
-
 ####  1.  `conan export external/snappy snappy/1.1.9@`
 
 export our conan recipe for snappy, this doesnt explicitly link the c++ standard library, which allows us to statically link it.
-
 
 snappy is a fast compression/decompression library developed by google, it aims to provide high speed data processing iwth a reasonable compression ratio (i do not have knowledge in compression/decompression tools however ill just blockbox).  `conanfile.py` is exported to snappy which is located in the `external/snappy` directory to the local conan cache.  and `snappy/1.1.9@` is the reference for the recipe in the local conan cache.  `rippled/external/snappy/`
 
@@ -458,10 +420,76 @@ a toolchain file is a script that cmake reads before your main `CMakeLists.txt` 
 
 NOTE IT'S VERY IMPORTANT TO RUN CMAKE FROM A BUILD DIRECTORY THAT'S SEPARATE FROM THE SOURCE DIRECTORY IN ORDER TO MAINTAIN MODULARITY.
 
+####  5.  `cmake --build .`
+
+invokation for the underlying build system!!!
+
+####  6.  `./rippled --unitest`
+
+execute the `rippled` unix binary executable and `--unittest` argument means to run the program's unit tests.  
+unit tests are small isolated tests that check the functionality of a specific part of a program.  
 
 
 
-###  `conanfile.py` located in root
+####  troubleshooting
+
+1.  `conan export external/snappy snappy/1.1.9@`  need to understand these lines
+
+indicates that there has been a successful export of snappy package recipe, the warning is just stating that couldnt find a remotes registry file which is the file taht keeps 
+
+
+```
+❯ conan export external/snappy snappy/1.1.9@
+WARN: Remotes registry file missing, creating default one in /Users/mbergen/.conan/remotes.json     
+Exporting package recipe
+snappy/1.1.9 exports: File 'conandata.yml' found. Exporting it...
+snappy/1.1.9 exports: Copied 1 '.yml' file: conandata.yml
+snappy/1.1.9: Calling export_sources()
+snappy/1.1.9: A new conanfile.py version was exported
+snappy/1.1.9: Folder: /Users/mbergen/.conan/data/snappy/1.1.9/_/_/export
+snappy/1.1.9: Exported revision: d64c117aaa6d3a61064ba8cec8212db6
+
+~/Documents/Github/rippled on master !1
+```
+
+2.  ⚠️  problem may come from using the wrong version of conan - install v 1.59.0
+
+```
+❯ brew info conan@1
+==> conan@1: stable 1.60.1 (bottled) [keg-only]
+Distributed, open source, package manager for C/C++
+https://conan.io
+/opt/homebrew/Cellar/conan@1/1.60.1 (1,490 files, 16.2MB)
+    Poured from bottle using the formulae.brew.sh API on 2023-06-13 at 10:22:19
+    From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb
+    License: MIT
+    ==> Dependencies
+    Build: pkg-config ✔
+    Required: openssl@1.1 ✔, pygments ✔, python@3.11 ✔, pyyaml ✔, six ✔
+    ==> Caveats
+    conan@1 is keg-only, which means it was not symlinked into /opt/homebrew,
+    because this is an alternate version of another formula.
+
+    If you need to have conan@1 first in your PATH, run:
+    echo 'export PATH="/opt/homebrew/opt/conan@1/bin:$PATH"' >> ~/.zshrc
+    ==> Analytics
+    install: 0 (30 days), 8 (90 days), 8 (365 days)
+    install-on-request: 0 (30 days), 8 (90 days), 8 (365 days)
+    build-error: 0 (30 days)
+
+    ~/Documents/Github/rippled on master !1
+
+    ❯ echo 'export PATH"/opt/homebrew/conan@1/bin:$PATH"' >> ~/.zshrc
+
+
+    ~
+
+    ❯ source .zshrc
+
+    .zshrc:export:116: not valid in this context: PATH/opt/homebrew/conan@1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+```
+
+###  `conanfile.py` located in rippled root
 
 ```python
 from conans import ConanFile
@@ -614,6 +642,8 @@ class Xrpl(ConanFile):
             'libsecp256k1.a',
         ]
 ```
+
+
 
 
 
