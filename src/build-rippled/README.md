@@ -54,9 +54,13 @@ technically cmake is unneeded to build rippled.  you could manually compile ever
 
 ####  `CMAKE_BUILD_TYPE`
 
-`CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.
+`CMAKE_BUILD_TYPE` must match `build_type`
 
-to define cmake you can pass it into the command ine 
+`CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.  since I need to be consistent with conan's build type system I will just use a command argument in cli.
+
+####  `CMAKE_PREFIX_PATH`  
+
+
 
 
 **parameters include**
@@ -76,7 +80,7 @@ a toolchain is a set of utilities to compile, link libraries, and creat archives
 
 ####  `CMakeLists.txt`
 
-```txt
+```cmake
 cmake_minimum_required(VERSION 3.16)                        #  version to run cmake
 
 if(POLICY CMP0074)                                          #  set policy to new for specific behavior
@@ -90,6 +94,10 @@ endif()
 file(TO_CMAKE_PATH "${CMAKE_MODULE_PATH}" CMAKE_MODULE_PATH)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Builds/CMake")
 
+#  comments from morgan
+#  set(CMAKE_BUILD_TYPE Release)
+#  this declaration eliminates the need to pass -DCMAKE_BUILD_TYPE=Release, however 
+#  this is not recommended for production builds, using cmake command line argument by using a profile or toolchain file is recommended
 project(rippled)                                            #  name of the project is ripple, 
                                                             #  this initializes a cmake project and sets various project related variables
 set(CMAKE_CXX_EXTENSIONS OFF)                               #  compiler settings, disable language extensions
@@ -125,7 +133,7 @@ if (target)
 endif ()
 
 #  defining the additional cmake files responsible for different aspects of the project
-include(RippledSanity)                                      #  ripped/Builds/Cmake/RippledSanity.cmake!!!! this get called a is parsed
+include(RippledSanity)                                      #  ripped/Builds/Cmake/RippledSanity.cmake!!!! this get called and it's parsed
 include(RippledVersion)
 include(RippledSettings)
 include(RippledRelease)
@@ -222,22 +230,25 @@ conan is a package manager for c++ ensuring that the process of installing, upgr
 
 3.  **build folders**  conan uses build folders to isolate different builds and prevent conflicts between dependencies.  by default conan generate build files in the current directoyr, but you can specify a different build folder to keep your project directory clean.
 
-we have written a conan configuration file `conanfile.py` so that conan can be used to correctly download, configure, and build, and install all of the dependencies for this project, using a single set of compiler and linker options for all of them.  it generates files that contain almost all of the parameters that cmake expects.  those tools include 
+we have written a conan configuration file `conanfile.py` so that conan can be used to correctly download, configure, and build, and install all of the dependencies for this project, using a single set of compiler and linker options for all of them.  
+
+the `conanfile.py` generates files that contain almost all of the parameters that cmake expects.  those tools include 
 
 1.  a single toolchain file
+
 2.  for every dependency each file all together implement version checking and define imported targets for the dependencies.  
     -  a cmake package configuration file
     -  package version file
     -  for every build type, a package target file
 
-the toolchain file itself amends the search path `CMAKE_PREFIX_PATH` so that `find_package()` will discover the generated package configuration files.
-
-all we must do to properly configure cmake is to pass the toolchiain file.????
+the toolchain file itself amends the search path `CMAKE_PREFIX_PATH` so that `find_package()` will discover the generated package configuration files.  all we must do to properly configure cmake is to pass the toolchiain file.
 
 what cmake parameters are left out?  you still need to pick a build system generator and if you choose a single-configuration generated youll need to pass the `CMAKE_BUILD_TYPE`, which such match the `build_type` setting you have to conan.  even then conan has parameters some of which are platform specific.  if conan's parlance parameters are either settings or options.  settings are shared by all packages e.g. build type.  options are specific to a given package, whether to build and link OpenSSL as a shared library.
 
 for settings conan goes through a complicated search process to choose defaults.  for options each package recipe define its own defaults.  
 you can pass every parameter to conan on the command line, but it more convenient to put them in a [profile](https://docs.conan.io/1/reference/profiles.html) 
+
+7.  [cmake-and-conan](#cmake-and-conan)
 
 ##  cmake and conan
 
