@@ -6,6 +6,13 @@
 1.  [server modes](https://xrpl.org/rippled-server-modes.html)
 2.  [`rippled/BUILD.md`](https://github.com/XRPLF/rippled/blob/master/BUILD.md#a-crash-course-in-cmake-and-conan)
 
+- [ ] `./rippled --unittest`
+- [ ] execute `./rippled --conf testnet_rippled.cfg`
+
+`./rippled server_info --conf testnet_rippled.cfg`
+
+when you have completed ledgers youre synced to the network
+
 ###  dependencies
 
 -  gcc: stable 13.1.0 [GNU compiler collection](https://gcc.gnu.org/)
@@ -17,9 +24,8 @@
 -  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
 -  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
--  <p class="red-text">do not use this -> conan</p> [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
-
-
+-  <p class="red-text">do not use this version of conan</p> [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
+-  conan@1 [conan@1](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb)
 
 ##  contents
 
@@ -404,7 +410,6 @@ to make conan put them in your build directory youll have to add the options `--
 
 ####  4.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
 
-
 1.  `cmake` command to run the cmake tool which is a build system generator whcih reads the `CMakeLists.txt` file that you write and generate build files for a build tool of your choice like Make
 
 2.  `-D` is used to define a variable that will be passed into the CMake script so `-DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_toolchain.cmake` is telling CMake to use a specific toolchain file which should exist after running the previous commands before 4
@@ -431,9 +436,17 @@ unit tests are small isolated tests that check the functionality of a specific p
 
 
 
-####  troubleshooting
 
-1.  `conan export external/snappy snappy/1.1.9@`  need to understand these lines
+
+
+
+
+
+
+
+###  console log output from commands
+
+1.  `❯ conan export external/snappy snappy/1.1.9@`  need to understand these lines
 
 indicates that there has been a successful export of snappy package recipe, the warning is just stating that couldnt find a remotes registry file which is the file taht keeps 
 
@@ -451,6 +464,18 @@ snappy/1.1.9: Exported revision: d64c117aaa6d3a61064ba8cec8212db6
 
 ~/Documents/Github/rippled on master !1
 ```
+
+2.  `❯ mkdir .build cd .build`
+
+3.  `❯ conan install .. --output-folder . --build missing --settings build_type=Release --settings compiler.runtime=MT`
+
+```
+❯ conan install .. --output-folder . --build missing --settings build_type=Release --settings compiler.runtime=MT
+ERROR: 'settings.compiler.runtime' doesn't exist for 'apple-clang'
+'settings.compiler' possible configurations are ['cppstd', 'libcxx', 'version']
+```
+
+####  troubleshooting
 
 2.  ⚠️  problem may come from using the wrong version of conan - install v 1.59.0
 
@@ -488,6 +513,91 @@ https://conan.io
 
     .zshrc:export:116: not valid in this context: PATH/opt/homebrew/conan@1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
 ```
+
+
+2.  
+
+```
+❯ conan install .. --output-folder . --build missing --settings build_type=Release
+Configuration:
+[settings]
+arch=armv8
+arch_build=armv8
+build_type=Release
+compiler=apple-clang
+compiler.cppstd=20
+compiler.libcxx=libc++
+compiler.version=14
+os=Macos
+os_build=Macos
+[options]
+[build_requires]
+[env]
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
+
+boost/1.77.0: Not found in local cache, looking in remotes...
+boost/1.77.0: Trying with 'conancenter'...
+Downloading conanmanifest.txt completed [0.70k]
+Downloading conanfile.py completed [81.81k]
+Downloading conan_export.tgz completed [1.65k]
+Decompressing conan_export.tgz completed [0.00k]
+boost/1.77.0: Downloaded recipe revision 0
+WARN: boost/1.77.0: requirement zlib/1.2.13 overridden by xrpl/1.10.1 to zlib/1.2.12
+.....
+
+35 warnings and 1 error generated.
+...failed updating 2 targets...
+boost/1.77.0:
+boost/1.77.0: ERROR: Package '12a0259a3874809e8c87bd0624bf06329b6d5b82' build failed
+boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release
+ERROR: boost/1.77.0: Error in build() method, line 887
+	self.run(full_command)
+	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
+```
+
+the error message is in the build() method on line 887 from boost/1.77.0
+and potentially since conan count locate the correct boost version
+the steps to troubleshoot are to re-run the build command with verbose logging which may help with where the error is coming from
+however, i may want to check the compatability of boost and conan because as it shows in the first warning was from boost 
+
+
+maybe on the 
+
+
+```
+❯ conan install .. --output-folder . --build missing --settings build_type=Release
+Configuration:
+[settings]
+arch=armv8
+arch_build=armv8
+build_type=Release
+compiler=apple-clang
+compiler.cppstd=20
+compiler.libcxx=libc++
+compiler.version=14
+os=Macos
+os_build=Macos
+[options]
+[build_requires]
+[env]
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
+
+boost/1.77.0: Not found in local cache, looking in remotes...
+boost/1.77.0: Trying with 'conancenter'...
+Downloading conanmanifest.txt completed [0.70k]
+Downloading conanfile.py completed [81.81k]
+Downloading conan_export.tgz completed [1.65k]
+Decompressing conan_export.tgz completed [0.00k]
+boost/1.77.0: Downloaded recipe revision 0
+WARN: boost/1.77.0: requirement zlib/1.2.13 overridden by xrpl/1.10.1 to zlib/1.2.12
+```
+
 
 ###  `conanfile.py` located in rippled root
 
@@ -713,4 +823,29 @@ conancenter
     poco/1.12.2
     poco/1.12.3
     poco/1.12.4
+```
+
+
+
+```
+openssl/1.1.1m: ['"conan-Release-Macos-armv8-apple-clang-14"', 'no-shared', '--prefix="/Users/mbergen/.conan/data/openssl/1.1.1m/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738"', '--openssldir="/Users/mbergen/.conan/data/openssl/1.1.1m/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738/res"', 'no-unit-test', 'threads', 'PERL=perl', 'no-tests', '--release', '-fPIC', 'no-md2']
+Configuring OpenSSL version 1.1.1m (0x101010dfL) for conan-Release-Macos-armv8-apple-clang-14
+Using os-specific seed configuration
+Creating configdata.pm
+Creating Makefile
+
+**********************************************************************
+***                                                                ***
+***   OpenSSL has been successfully configured                     ***
+***                                                                ***
+***   If you encounter a problem while building, please open an    ***
+***   issue on GitHub <https://github.com/openssl/openssl/issues>  ***
+***   and include the output from the following command:           ***
+***                                                                ***
+***       perl configdata.pm --dump                                ***
+***                                                                ***
+***   (If you are new to OpenSSL, you might want to consult the    ***
+***   'Troubleshooting' section in the INSTALL file first)         ***
+***                                                                ***
+**********************************************************************
 ```
