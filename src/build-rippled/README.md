@@ -17,34 +17,44 @@
 -  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
 -  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
--  conan [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
+-  <p class="red-text">do not use this -> conan</p> [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
 
-⚠️  problem may come from using the wrong version of conan
+
+⚠️  problem may come from using the wrong version of conan - install v 1.59.0
 
 ```
-❯ git checkout master
-M	CMakeLists.txt
-Already on 'master'
-Your branch is up to date with 'origin/master'.
+❯ brew info conan@1
+==> conan@1: stable 1.60.1 (bottled) [keg-only]
+Distributed, open source, package manager for C/C++
+https://conan.io
+/opt/homebrew/Cellar/conan@1/1.60.1 (1,490 files, 16.2MB)
+  Poured from bottle using the formulae.brew.sh API on 2023-06-13 at 10:22:19
+From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb
+License: MIT
+==> Dependencies
+Build: pkg-config ✔
+Required: openssl@1.1 ✔, pygments ✔, python@3.11 ✔, pyyaml ✔, six ✔
+==> Caveats
+conan@1 is keg-only, which means it was not symlinked into /opt/homebrew,
+because this is an alternate version of another formula.
 
-❯ conan profile new default --detect
-usage: conan profile [-h] [-v [V]] {detect,list,path,show} ...
-conan profile: error: argument subcommand: invalid choice: 'new' (choose from 'detect', 'list', 'path', 'show')
-ERROR: Exiting with code: 2
+If you need to have conan@1 first in your PATH, run:
+  echo 'export PATH="/opt/homebrew/opt/conan@1/bin:$PATH"' >> ~/.zshrc
+==> Analytics
+install: 0 (30 days), 8 (90 days), 8 (365 days)
+install-on-request: 0 (30 days), 8 (90 days), 8 (365 days)
+build-error: 0 (30 days)
 
 ~/Documents/Github/rippled on master !1
 
-❯ pip show conan
-Name: conan
-Version: 2.0.6
-Summary: Conan C/C++ package manager
-Home-page: https://conan.io
-Author: JFrog LTD
-Author-email: luism@jfrog.com
-License: MIT
-Location: /opt/homebrew/lib/python3.11/site-packages
-Requires: colorama, fasteners, Jinja2, patch-ng, python-dateutil, PyYAML, requests, urllib3
-Required-by:
+❯ echo 'export PATH"/opt/homebrew/conan@1/bin:$PATH"' >> ~/.zshrc
+
+
+~
+
+❯ source .zshrc
+
+.zshrc:export:116: not valid in this context: PATH/opt/homebrew/conan@1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
 ```
 
 ##  contents
@@ -59,7 +69,6 @@ Required-by:
 ###  cmake
 
 cmake is a meta-build tool for generating makefiles based on platform specific parameters.
-
 cmake is a tool to control the softwares compilation process using simple platform and compiler independent configuration files, and generate native `makefiles` and workspaces taht can be used in the compiler enviroment of your choice.
 
 cmake is an extensible, system that manages the build process in an operating system and in a compiler-independent manner.  unlike many cross-platform systems, cmake is deisgned to be used in conjunction with the native build enviroment.  simple configuration files placed in each source directory is called `CMakeList.txt` are used to generate standard build files e.g. `makefiles` on unix.
@@ -90,7 +99,6 @@ technically cmake is unneeded to build rippled.  you could manually compile ever
 `CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.  since I need to be consistent with conan's build type system I will just use a command argument in cli.
 
 ####  `CMAKE_PREFIX_PATH`  
-
 
 
 
@@ -293,21 +301,94 @@ in order to use cmake and conan togetehr you need to configure cmake to recogniz
 
 all the commands and instructions provided need to be **adapted** to my specific project and enviroment.  it's essential to understand the purpose and implications of each step before executing the commands.
 
+##  commands for package set up
 
+####  1.  `git checkout master`
 
+```
+Already on 'master'
+Your branch is up to date with 'origin/master'.
+```
 
+####  2.  `conan profile new default --detect`
 
+```
+❯ conan profile new default --detect
+Found apple-clang 14.0
+apple-clang>=13, using the major as version
+Profile created with detected settings: /Users/mbergen/.conan/profiles/default
+```
 
+####  3.  `conan profile update settings.compiler.cppstd=20 default`
 
+1.  `conan` calling the package manager
+2.  `profile` is a keyword specifiying that we are working with a conan profile, specifically the Profile created with detected settings: /Users/mbergen/.conan/profiles/default
+3.  `update` indicates that we want to update an existing profile (so writing out to default)
+4.  `settings.compiler.cppstd` refers to the standard compiler were using
+5.  `20` is the dialect of c++
+6.  `default` specifies the name of the profile to update, `default` is a common name, but you can add more profiles and configure their name to anything
 
+####  4.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
 
+1.  `which gcc` in order to locate and define the path value of `c` key which is the compiler for c
 
+```
+❯ which gcc
+/usr/bin/gcc
+```
 
+2.  `which g++` in order to locate and define the path value of `c++` key which is the compiler for c++
 
+```
+❯ which g++
+/usr/bin/g++
+```
 
+####  5.  add the following to default profile or call in cli
 
+```
+conan profile update env.CC=/usr/bin/gcc default
+conan profile update env.CXX=/usr/bin/g++ default
+```
 
+this just generates a [env] variable with two CC and CXX paths provided
 
+###  Conan Profile
+
+```
+❯ tree .conan
+.
+├── artifacts.properties
+├── cacert.pem
+├── conan.conf
+├── profiles
+│   └── default
+└── version.txt
+
+2 directories, 5 files
+```
+
+###  `.conan/profiles/default`
+
+```
+[settings]
+os=Macos
+os_build=Macos
+arch=armv8
+arch_build=armv8
+compiler=apple-clang
+compiler.version=14
+compiler.libcxx=libc++
+build_type=Release
+compiler.cppstd=20
+[options]
+[build_requires]
+[env]
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
+```
 
 
 
