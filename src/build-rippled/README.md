@@ -5,23 +5,29 @@
 ###  references
 1.  [server modes](https://xrpl.org/rippled-server-modes.html)
 2.  [`rippled/BUILD.md`](https://github.com/XRPLF/rippled/blob/master/BUILD.md#a-crash-course-in-cmake-and-conan)
-3.  gcc: stable 13.1.0 [GNU compiler collection](https://gcc.gnu.org/)
 
-fetched `gmp` [gnu multiple precision arithmetic library](https://gmplib.org)
-fetched `isl` [integer set library for the polyhedral model](https://libisl.sourceforge.io/)
-fetched `mpfr` [c library for multiple-precision floating-point computations](https://www.mpfr.org/)
-Installing dependencies for gcc: gmp, isl, mpfr and libmpc
-
-[clang 13 version]()
-[apple clang]()
-[msvc]()
+###  dependencies
+-  gcc: stable 13.1.0 [GNU compiler collection](https://gcc.gnu.org/)
+-  fetched `gmp` [gnu multiple precision arithmetic library](https://gmplib.org)
+-  fetched `isl` [integer set library for the polyhedral model](https://libisl.sourceforge.io/)
+-  fetched `mpfr` [c library for multiple-precision floating-point computations](https://www.mpfr.org/)
+-  fetched `libmpc` [c library for arithmetic of complex num](https://www.multiprecision.org/mpc)
+-  clang 13.0.0 [clang 13 version](https://releases.llvm.org/13.0.0/tools/clang/docs/ReleaseNotes.html)
+-  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
+-  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
 
 ##  contents
 
+1.  [cmake](#cmake)
+2.  [conan](#conan)
+3.  [`CMAKE_BUILD_TYPE`](##cmake-build-type)
+4.  [`CMakeLists.txt`](##cmakelists-txt)
+5.  [install conan with pip](#install-conan-with-pip)
+6.  [getting-started](#getting-started)
+
 ###  cmake
 
--  cmake makes your makefile
--  cmake is a meta-build tool for generating makefiles.
+cmake is a meta-build tool for generating makefiles based on platform specific parameters.
 
 cmake is a tool to control the softwares compilation process using simple platform and compiler independent configuration files, and generate native `makefiles` and workspaces taht can be used in the compiler enviroment of your choice.
 
@@ -31,11 +37,27 @@ cmake can generate a native build enviroment that will compile source code, crea
 
 cmake is deisgned to support complex directory hierarchies and applications dependent on several libraries.  for example cmake supports projects consisting of multiple toolkits, where each toolkit might contain sevral directories, and the application depends on the toolkits plus additional code.  cmake can also handle situations where executables must be built in order to generate code that is then compiled and linked into a final application.
 
-the build process is controlled by creating one or more `CMakeLists.txt` files in each directory (including subdirectories) that make up the project.
-
-Each `CMakeLists.txt` consists of one or more commands.  each command has the form `COMMAND (args..)` where `COMMAND`is the name of the command and `args` is a white-spaced separated list of arguments.
+the build process is controlled by creating one or more `CMakeLists.txt` files in each directory (including subdirectories) that make up the project.  Each `CMakeLists.txt` consists of one or more commands.  each command has the form `COMMAND (args..)` where `COMMAND`is the name of the command and `args` is a white-spaced separated list of arguments.
 
 technically cmake is unneeded to build rippled.  you could manually compile every translation unit into an object file, using the right compiler options, and then manually link all those objects together, using the right linker options.  however that's very tedious and error prone, which is why we use cmake.  we have written cmake configuration files for this project so that cmake can be used to correctly compile and link all of the translation units in it or rather cmake will generate files for a separate build system that compile and link all of the translation units.  even then cmake has parameters, some of which are platform specific.  in cmake's parlance parameters are specifically named variables like `CMAKE_BUILD_TYPE` or `CMAKE_MSVC_RUNTIME_LIBRARY`
+
+1.  `CMakeLists.txt` is the main configuration file written in cmake scripting lang, it specifies the project structure, source files, dependencies, build options, and targets.
+
+2.  **generators** cmake supports muild different build system generators such as (make, ninja, vscode & xcode ides) that can be specififed when running cmake.  each generator produces build files specific to that system.
+
+3.  **variables** cmake provides various variables that control the build process such as the build data type `CMAKE_BUILD_TYPE`, compiler options, dependency paths, etc.  these variables can be set in `CMakeLists.txt` or passed in via the command line.
+
+4.  **toolchain file** a toolchain file is used to specify platform specific settings, such as the compiler, linker, and other tool locations. it helps ensure consistent configuration across different platforms.
+
+5.  **build configurations**  cmake supports different build configurations, such as debug, release, relwithwebinfo, etc.  these configurations determine the compilation flags, optimization levels, and other settinsg used during the build process.
+
+
+####  `CMAKE_BUILD_TYPE`
+
+`CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.
+
+to define cmake you can pass it into the command ine 
+
 
 **parameters include**
 
@@ -190,6 +212,16 @@ include(RippledValidatorKeys)
 
 ##  conan
 
+conan is a package manager for c++ ensuring that the process of installing, upgrading, configuring, and managing software packages or libraries.  the key concepts to understand conan for is
+
+1.  `Conanfile.py` this is the configuration file used by conan to define and manage dependencies for the project and it specifies the package name, version, build options, and dependencies.
+
+2.  **profiles** profiles in conan define the settings and options for your build enviroment.  they include settings like the compiler version, build type, and options specific to your platform.  profiles help ensure consistent builds across different machines.
+
+2.  **packages** in conan represent external libraries or dependencies that the project relies on.  the package recipes define how to download, configure, build, and install the dependencies.
+
+3.  **build folders**  conan uses build folders to isolate different builds and prevent conflicts between dependencies.  by default conan generate build files in the current directoyr, but you can specify a different build folder to keep your project directory clean.
+
 we have written a conan configuration file `conanfile.py` so that conan can be used to correctly download, configure, and build, and install all of the dependencies for this project, using a single set of compiler and linker options for all of them.  it generates files that contain almost all of the parameters that cmake expects.  those tools include 
 
 1.  a single toolchain file
@@ -204,12 +236,64 @@ all we must do to properly configure cmake is to pass the toolchiain file.????
 
 what cmake parameters are left out?  you still need to pick a build system generator and if you choose a single-configuration generated youll need to pass the `CMAKE_BUILD_TYPE`, which such match the `build_type` setting you have to conan.  even then conan has parameters some of which are platform specific.  if conan's parlance parameters are either settings or options.  settings are shared by all packages e.g. build type.  options are specific to a given package, whether to build and link OpenSSL as a shared library.
 
-for settings conan goes through a complicated search process to choose defaults.  for options each packaeg recipe define its own defaults.  you can pass every parameter to conan on the command line, but it more convenient to put them in a [profile](https://docs.conan.io/1/reference/profiles.html)
+for settings conan goes through a complicated search process to choose defaults.  for options each package recipe define its own defaults.  
+you can pass every parameter to conan on the command line, but it more convenient to put them in a [profile](https://docs.conan.io/1/reference/profiles.html) 
 
-###  install with pip 
+##  cmake and conan
 
-install with python package manager and not homebrew.
-conan will be installed globally 
+in order to use cmake and conan togetehr you need to configure cmake to recognize and link the dependencies managed by conan.  conan generates package configuration files that cmake can use to discover and link dependencies correctly.  the typical workflow involves exporting the dependencies using conan, creating a build directory, instaling the dependencies using conan, configuring cmake with the generated package configuration file, and finally building the project.
+
+1.  exporting dependencies
+2.  creating a build directory
+3.  installing dependencies
+4.  configuring cmake
+5.  building the project
+
+all the commands and instructions provided need to be **adapted** to my specific project and enviroment.  it's essential to understand the purpose and implications of each step before executing the commands.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###  install conan with pip 
+
+install with python package manager and not homebrew.  conan will be installed globally when using pip.
+
 
 ```
 ❯ tree .conan2
