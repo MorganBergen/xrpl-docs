@@ -7,6 +7,7 @@
 2.  [`rippled/BUILD.md`](https://github.com/XRPLF/rippled/blob/master/BUILD.md#a-crash-course-in-cmake-and-conan)
 
 ###  dependencies
+
 -  gcc: stable 13.1.0 [GNU compiler collection](https://gcc.gnu.org/)
 -  fetched `gmp` [gnu multiple precision arithmetic library](https://gmplib.org)
 -  fetched `isl` [integer set library for the polyhedral model](https://libisl.sourceforge.io/)
@@ -15,6 +16,24 @@
 -  clang 13.0.0 [clang 13 version](https://releases.llvm.org/13.0.0/tools/clang/docs/ReleaseNotes.html)
 -  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
 -  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
+-  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
+-  conan [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
+
+⚠️  problem
+
+```
+❯ git checkout master
+M	CMakeLists.txt
+Already on 'master'
+Your branch is up to date with 'origin/master'.
+
+❯ conan profile new default --detect
+usage: conan profile [-h] [-v [V]] {detect,list,path,show} ...
+conan profile: error: argument subcommand: invalid choice: 'new' (choose from 'detect', 'list', 'path', 'show')
+ERROR: Exiting with code: 2
+
+~/Documents/Github/rippled on master !1
+```
 
 ##  contents
 
