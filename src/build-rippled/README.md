@@ -24,7 +24,6 @@ when you have completed ledgers youre synced to the network
 -  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
 -  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
--  <p class="red-text">do not use this version of conan</p> [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
 -  conan@1 [conan@1](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb)
 
 ##  contents
