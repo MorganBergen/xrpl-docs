@@ -19,7 +19,7 @@
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
 -  conan [conan verison 2.0.6 with pip](https://conan.io/downloads.html)
 
-⚠️  problem
+⚠️  problem may come from using the wrong version of conan
 
 ```
 ❯ git checkout master
@@ -33,6 +33,18 @@ conan profile: error: argument subcommand: invalid choice: 'new' (choose from 'd
 ERROR: Exiting with code: 2
 
 ~/Documents/Github/rippled on master !1
+
+❯ pip show conan
+Name: conan
+Version: 2.0.6
+Summary: Conan C/C++ package manager
+Home-page: https://conan.io
+Author: JFrog LTD
+Author-email: luism@jfrog.com
+License: MIT
+Location: /opt/homebrew/lib/python3.11/site-packages
+Requires: colorama, fasteners, Jinja2, patch-ng, python-dateutil, PyYAML, requests, urllib3
+Required-by:
 ```
 
 ##  contents
