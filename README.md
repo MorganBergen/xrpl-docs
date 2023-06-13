@@ -5,6 +5,7 @@
 ### selected readings
 
 1.  [private ledger network](./src/private-network/README.md)
+2.  [build rippled from source](./src/build-rippled/README.md)
 
 ### Documentation
 
