@@ -213,6 +213,7 @@ conan will be installed globally
 
 ```
 ❯ tree .conan2
+❯ tree .conan2
 .conan2
 ├── extensions
 │   └── plugins
