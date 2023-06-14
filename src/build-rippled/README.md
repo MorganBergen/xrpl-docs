@@ -11,7 +11,30 @@
 
 `./rippled server_info --conf testnet_rippled.cfg`
 
+
+```
+❯ ps aux | grep rippled
+mbergen          51980  10.6  6.0 410884640 1007936 s001  S+    6:02PM   2:00.89 ./rippled --unittest
+mbergen          52318   0.0  0.0 407962000    112 s004  R+    6:08PM   0:00.00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --exclude-dir=.idea --exclude-dir=.tox rippled
+```
+
 when you have completed ledgers youre synced to the network
+
+
+###  systems hardware and software config
+
+```
+OS: macOS 13.4 22F66 arm64
+Host: MacBookPro18,3
+Kernel: 22.5.0
+Uptime: 20 hours, 55 mins
+Packages: 56 (brew)
+Shell: zsh 5.9
+Terminal: iTerm2
+Terminal Font: MesloLGS-NF-Regular 13
+CPU: Apple M1 Pro
+Memory: 2026MiB / 16384MiB
+```
 
 ###  dependencies
 
@@ -395,6 +418,8 @@ include(RippledValidatorKeys)
 
 conan is a package manager for c++ ensuring that the process of installing, upgrading, configuring, and managing software packages or libraries.  the key concepts to understand conan for is
 
+conan is written in a platform independent style, the recepie works on every platfrom on every configuration with every compiler!
+
 1.  `Conanfile.py` this is the configuration file used by conan to define and manage dependencies for the project and it specifies the package name, version, build options, and dependencies.
 
 2.  **profiles** profiles in conan define the settings and options for your build enviroment.  they include settings like the compiler version, build type, and options specific to your platform.  profiles help ensure consistent builds across different machines.
@@ -449,8 +474,13 @@ all the commands and instructions provided need to be **adapted** to my specific
 1.  `conan export external/snappy snappy/1.1.9@`
 2.  `mkdir .build`
 3.  `cd .build`
-4.  `conan install .. --output-folder . --build missing --settings build_type=Release` boost/1.77.0 failed
+
+4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
+
+
 5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
+
+
 6.  `cmake --build .`
 7.  `./rippled --unitest`
 
@@ -517,16 +547,42 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 
 4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
 
-
-conan install .. --output-folder . --build=boost --build=missing --settings build_type=Release
+```
+❯ conan profile update env.CFLAGS="-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1" default
+❯ conan profile update env.CXXFLAGS="-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1" default
+❯ conan profile update options.boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT" default
+soci/4.0.3 package(): Packaged 1 '.txt' file: LICENSE_1_0.txt
+soci/4.0.3 package(): Packaged 49 '.h' files
+soci/4.0.3 package(): Packaged 2 '.a' files: libsoci_sqlite3.a, libsoci_core.a
+soci/4.0.3: Package '92bf3150b7bf55000cc57d7621955101b2fb594e' created
+soci/4.0.3: Created package revision 0c8596ec957f52c273dcb8bfdcbbdc8c
+conanfile.py (xrpl/1.10.1): WARN: Using the new toolchains and generators without specifying a build profile (e.g: -pr:b=default) is discouraged and might cause failures and unexpected behavior
+conanfile.py (xrpl/1.10.1): Generator 'CMakeDeps' calling 'generate()'
+conanfile.py (xrpl/1.10.1): Generator txt created conanbuildinfo.txt
+conanfile.py (xrpl/1.10.1): Calling generate()
+conanfile.py (xrpl/1.10.1): WARN: Using the new toolchains and generators without specifying a build profile (e.g: -pr:b=default) is discouraged and might cause failures and unexpected behavior
+conanfile.py (xrpl/1.10.1): Preset 'release' added to CMakePresets.json. Invoke it manually using 'cmake --preset release'
+conanfile.py (xrpl/1.10.1): If your CMake version is not compatible with CMakePresets (<3.19) call cmake like: 'cmake <path> -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=/Users/mbergen/Documents/Github/rippled/.build/build/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=Release'
+conanfile.py (xrpl/1.10.1): Aggregating env generators
+conanfile.py (xrpl/1.10.1): Generated conaninfo.txt
+conanfile.py (xrpl/1.10.1): Generated graphinfo
+```
 
 5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
+
+```
+-- Configuring done (1.4s)
+-- Generating done (0.1s)
+-- Build files have been written to: /Users/mbergen/Documents/Github/rippled/.build
+```
+
 6.  `cmake --build .`
 7.  `./rippled --unitest`
 
 ##  `~/.conan/profiles/default`
 
 ```
+❯ cat default
 [settings]
 os=Macos
 os_build=Macos
@@ -538,15 +594,22 @@ compiler.libcxx=libc++
 build_type=Release
 compiler.cppstd=20
 [options]
+boost:extra_b2_flags=define=BOOST_ASIO_HAS_STD_INVOKE_RESULT
 [build_requires]
-```
+[env]
+CC=/usr/bin/gcc
+CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
+CXX=/usr/bin/g++
+CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}`
 ##  `conan version`
+```
 
 `Conan version 1.59.0`
 
 -----------------------------------------------------------
 
-LINE 250 ON BUILD
 
 ```
 brew uninstall conan@1
