@@ -26,6 +26,173 @@ when you have completed ledgers youre synced to the network
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
 -  conan@1 [conan@1](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb)
 
+
+### problem
+
+```
+❯ rm -rf ~/.conan/data
+❯ rm -rf ~/.conan/conan.conf
+❯ rm -rf ~/.conan/profiles
+❯ rm -r .build
+❯ conan profile new default --detect
+Found apple-clang 14.0
+apple-clang>=13, using the major as version
+Profile created with detected settings: /Users/mbergen/.conan/profiles/default
+❯ conan profile update settings.compiler.cppstd=20 default
+❯ conan profile update settings.compiler.cppstd=20 default
+❯ conan profile update settings.compiler.cppstd=20 default
+❯ l
+total 640
+drwxr-xr-x  23 mbergen  staff   736B Jun 14 16:03 .
+drwxr-xr-x  10 mbergen  staff   320B Jun 12 15:40 ..
+-rw-r--r--   1 mbergen  staff   2.5K Jun  6 15:45 .clang-format
+-rw-r--r--   1 mbergen  staff    45B Jun  6 15:45 .codecov.yml
+drwxr-xr-x  12 mbergen  staff   384B Jun 14 16:06 .git
+-rw-r--r--   1 mbergen  staff   171B Jun  6 15:45 .git-blame-ignore-revs
+-rw-r--r--   1 mbergen  staff   285B Jun  6 15:45 .gitattributes
+drwxr-xr-x   5 mbergen  staff   160B Jun  9 09:16 .github
+-rw-r--r--   1 mbergen  staff   1.5K Jun  9 09:16 .gitignore
+-rw-r--r--   1 mbergen  staff    16K Jun 14 15:09 BUILD.md
+drwxr-xr-x  11 mbergen  staff   352B Jun  9 09:16 Builds
+-rw-r--r--   1 mbergen  staff   3.4K Jun 14 10:37 CMakeLists.txt
+-rw-r--r--   1 mbergen  staff   7.2K Jun  6 15:45 CONTRIBUTING.md
+-rw-r--r--   1 mbergen  staff   902B Jun  6 15:45 LICENSE.md
+-rw-r--r--   1 mbergen  staff   6.1K Jun 12 14:40 README.md
+-rw-r--r--   1 mbergen  staff   237K Jun  6 15:45 RELEASENOTES.md
+-rw-r--r--   1 mbergen  staff   9.9K Jun  9 09:16 SECURITY.md
+drwxr-xr-x  16 mbergen  staff   512B Jun  6 15:45 bin
+drwxr-xr-x   6 mbergen  staff   192B Jun  9 09:16 cfg
+-rw-r--r--   1 mbergen  staff   4.6K Jun 13 09:58 conanfile.py
+drwxr-xr-x  16 mbergen  staff   512B Jun  9 09:16 docs
+drwxr-xr-x   3 mbergen  staff    96B Jun  9 09:16 external
+drwxr-xr-x   7 mbergen  staff   224B Jun  6 15:45 src
+❯ conan export external/snappy snappy/1.1.9@
+Exporting package recipe
+snappy/1.1.9 exports: File 'conandata.yml' found. Exporting it...
+snappy/1.1.9 exports: Copied 1 '.yml' file: conandata.yml
+snappy/1.1.9: Calling export_sources()
+snappy/1.1.9: A new conanfile.py version was exported
+snappy/1.1.9: Folder: /Users/mbergen/.conan/data/snappy/1.1.9/_/_/export
+snappy/1.1.9: Exported revision: d64c117aaa6d3a61064ba8cec8212db6
+❯ mkdir .build
+❯ cd .conan
+cd: no such file or directory: .conan
+❯ cd .build
+❯ conan install .. --output-folder . --build missing --settings build_type=Release
+Configuration:
+[settings]
+arch=armv8
+arch_build=armv8
+build_type=Release
+compiler=apple-clang
+compiler.cppstd=20
+compiler.libcxx=libc++
+compiler.version=14
+os=Macos
+os_build=Macos
+[options]
+[build_requires]
+[env]
+
+35 warnings and 1 error generated.
+...failed updating 2 targets...
+boost/1.77.0:
+boost/1.77.0: ERROR: Package '12a0259a3874809e8c87bd0624bf06329b6d5b82' build failed
+boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release
+ERROR: boost/1.77.0: Error in build() method, line 887
+	self.run(full_command)
+	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
+```
+
+
+
+
+
+
+
+
+
+
+
+
+```
+❯ gcc --version
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+❯ g++ --version
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+❯ clang --version
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+❯ clang++ --version
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+❯ cmake --version
+cmake version 3.26.4
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+```
+
+installing boost
+
+```
+❯ l
+total 16
+drwx------@  5 mbergen  staff   160B Jun 14 15:43 .
+drwxr-x---+ 42 mbergen  staff   1.3K Jun 14 15:44 ..
+-rw-r--r--@  1 mbergen  staff   6.0K Jun 14 11:09 .DS_Store
+-rw-r--r--   1 mbergen  staff     0B May 27 11:10 .localized
+drwxr-xr-x@ 25 mbergen  staff   800B Jun 14 11:19 boost_1_77_0
+❯ cd boost_1_77_0
+❯ ./bootstrap.sh
+Building B2 engine..
+
+###
+###
+### Using 'clang' toolset.
+###
+###
+
+Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+Target: arm64-apple-darwin22.5.0
+Thread model: posix
+InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+.....
+./b2 --prefix=/usr/local
+
+
+❯ brew info boost
+==> boost: stable 1.82.0 (bottled), HEAD
+Collection of portable C++ source libraries
+https://www.boost.org/
+/opt/homebrew/Cellar/boost/1.82.0 (16,057 files, 491.8MB) *
+  Poured from bottle using the formulae.brew.sh API on 2023-06-14 at 15:54:05
+From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/boost.rb
+License: BSL-1.0
+==> Dependencies
+Required: icu4c ✔, xz ✔, zstd ✔
+==> Options
+--HEAD
+	Install HEAD version
+==> Analytics
+install: 49,904 (30 days), 7,963 (90 days), 1,100,427 (365 days)
+install-on-request: 10,467 (30 days), 4,850 (90 days), 379,749 (365 days)
+build-error: 126 (30 days)
+❯ echo /opt/homebrew/Cellar/boost/1.82.0
+/opt/homebrew/Cellar/boost/1.82.0
+
+
+```
+
 ##  contents
 
 1.  [cmake](#cmake)
@@ -333,13 +500,26 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 2.  `conan profile new default --detect`
 3.  `conan profile update settings.compiler.cppstd=20 default`
 
+
+-  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": /usr/bin/g++"}' default`
+
+-  `conan profile update env.CC=/usr/bin/gcc default`
+
+-  `conan profile update env.CXX=/usr/bin/g++ default`
+
 ##  build
 
 1.  `conan export external/snappy snappy/1.1.9@`
 2.  `mkdir .build`
 3.  `cd .build`
 3.  `conan install --build boost .`
+
+
 4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
+
+
+conan install .. --output-folder . --build=boost --build=missing --settings build_type=Release
+
 5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
 6.  `cmake --build .`
 7.  `./rippled --unitest`
@@ -384,7 +564,17 @@ Conan version 1.59.0
 boost version needs to be 1.77.0
 ```
 
+```
+35 warnings and 1 error generated.
+...failed updating 2 targets...
+boost/1.77.0:
+boost/1.77.0: ERROR: Package '12a0259a3874809e8c87bd0624bf06329b6d5b82' build failed
+boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release
+ERROR: boost/1.77.0: Error in build() method, line 887
+	self.run(full_command)
+	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
 
+```
 
 
 
@@ -599,45 +789,19 @@ ERROR: 'settings.compiler.runtime' doesn't exist for 'apple-clang'
 
 ####  troubleshooting
 
-2.  ⚠️  problem may come from using the wrong version of conan - install v 1.59.0
 
-```
-❯ brew info conan@1
-==> conan@1: stable 1.60.1 (bottled) [keg-only]
-Distributed, open source, package manager for C/C++
-https://conan.io
-/opt/homebrew/Cellar/conan@1/1.60.1 (1,490 files, 16.2MB)
-    Poured from bottle using the formulae.brew.sh API on 2023-06-13 at 10:22:19
-    From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb
-    License: MIT
-    ==> Dependencies
-    Build: pkg-config ✔
-    Required: openssl@1.1 ✔, pygments ✔, python@3.11 ✔, pyyaml ✔, six ✔
-    ==> Caveats
-    conan@1 is keg-only, which means it was not symlinked into /opt/homebrew,
-    because this is an alternate version of another formula.
+conan is in charge of configuring the sources for boost version 1.77.0 and downloads boost archive
 
-    If you need to have conan@1 first in your PATH, run:
-    echo 'export PATH="/opt/homebrew/opt/conan@1/bin:$PATH"' >> ~/.zshrc
-    ==> Analytics
-    install: 0 (30 days), 8 (90 days), 8 (365 days)
-    install-on-request: 0 (30 days), 8 (90 days), 8 (365 days)
-    build-error: 0 (30 days)
+conan is managing the download and extraction of the boost source code, which is necessary for building the boost library.  this error below could be from 
 
-    ~/Documents/Github/rippled on master !1
+incompatible configurations
+missing dependencies
+or issues with the build enviroment
 
-    ❯ echo 'export PATH"/opt/homebrew/conan@1/bin:$PATH"' >> ~/.zshrc
+steps to troubleshoot:
 
+1.  clean the build folder:  delete the contents of the build folder to ensure a clean build 
 
-    ~
-
-    ❯ source .zshrc
-
-    .zshrc:export:116: not valid in this context: PATH/opt/homebrew/conan@1/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
-```
-
-
-2.  
 
 ```
 ❯ conan install .. --output-folder . --build missing --settings build_type=Release
