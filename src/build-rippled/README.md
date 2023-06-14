@@ -268,6 +268,132 @@ in order to use cmake and conan togetehr you need to configure cmake to recogniz
 
 all the commands and instructions provided need to be **adapted** to my specific project and enviroment.  it's essential to understand the purpose and implications of each step before executing the commands.
 
+-----------------------------------------------------------
+##  package set up
+
+1.  `git checkout master`
+2.  `conan profile new default --detect`
+3.  `conan profile update settings.compiler.cppstd=20 default`
+4.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
+5.  `conan profile update env.CC=/sr/bin/gcc default` `conan profile update env.CXX=/usr/bin/g++ default`
+
+##  build
+
+1.  `conan export external/snappy snappy/1.1.9@`
+2.  `mkdir .build`
+3.  `cd .build`
+4.  `conan install .. --output-folder . --build missing --settings build_type=Release` boost/1.77.0 failed
+5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
+6.  `cmake --build .`
+7.  `./rippled --unitest`
+
+##  `~/.conan/profiles/default`
+
+```
+[settings]
+os=Macos
+os_build=Macos
+arch=armv8
+arch_build=armv8
+compiler=apple-clang
+compiler.version=14
+compiler.libcxx=libc++
+build_type=Release
+compiler.cppstd=20
+[options]
+[build_requires]
+[env]
+CC=/usr/bin/gcc
+CXX=/usr/bin/g++
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
+```
+##  `conan version`
+
+`Conan version 1.60.1`
+-----------------------------------------------------------
+
+
+
+
+
+
+-----------------------------------------------------------
+##  reset conan package setup
+
+1.  `pwd rippled`
+2.  `rm -rf ~/.conan/data`
+3.  `rm -rf ~/.conan/conan.conf`
+4.  `rm -rf ~/.conan/profiles`
+4.  `rm -r .build`
+
+##  package set up
+
+1.  `git checkout master`
+2.  `conan profile new default --detect`
+3.  `conan profile update settings.compiler.cppstd=20 default`
+
+##  build
+
+1.  `conan export external/snappy snappy/1.1.9@`
+2.  `mkdir .build`
+3.  `cd .build`
+3.  `conan install --build boost .`
+4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
+5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
+6.  `cmake --build .`
+7.  `./rippled --unitest`
+
+##  `~/.conan/profiles/default`
+
+```
+[settings]
+os=Macos
+os_build=Macos
+arch=armv8
+arch_build=armv8
+compiler=apple-clang
+compiler.version=14
+compiler.libcxx=libc++
+build_type=Release
+compiler.cppstd=20
+[options]
+[build_requires]
+```
+##  `conan version`
+
+`Conan version 1.59.0`
+
+-----------------------------------------------------------
+
+LINE 250 ON BUILD
+
+```
+brew uninstall conan@1
+brew install https://raw.githubusercontent.com/homebrew/homebrew-core/1fc9e09956a2aa5ee2f2f4f6c81e359c232dee0f/formula/conan.rb
+pip install conan==1.59.0
+❯ conan --version
+Conan version 1.59.0
+❯ tree .conan
+.conan
+├── conan.conf
+└── version.txt
+
+1 directory, 2 files
+
+boost version needs to be 1.77.0
+```
+
+
+
+
+
+
+
+
+
+
+
 ##  commands for package set up
 
 ####  1.  `git checkout master`
@@ -432,9 +558,6 @@ invokation for the underlying build system!!!
 
 execute the `rippled` unix binary executable and `--unittest` argument means to run the program's unit tests.  
 unit tests are small isolated tests that check the functionality of a specific part of a program.  
-
-
-
 
 
 
