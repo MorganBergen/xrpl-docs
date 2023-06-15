@@ -1133,66 +1133,6 @@ install with python package manager and not homebrew.  conan will be installed g
 5 directories, 7 files
 ```
 
-###  getting started with conan
-
-MD5 hash calculator app that uses [`Poco`](https://pocoproject.org) c++ libraries.  we will use cmake as the build system.
-
-[`md5.cpp`](./examples/libraries/poco/md5.cpp)
-
-```cpp
-
-```
-
-`md5.cpp` relies on the Poco libraries, we can look for them in the ConanCenter remote [conancenter](https://conan.io/center/) and typing `poco` in the search box and we'll dee different versions available
-
-[`poco/1.8.1`](https://conan.io/center/poco?version=1.8.1&os=Macos&tab=recipe)
-`poco/1.9.3`
-`poco/1.9.4`
-
-the conan client contains a command to search in remote repoistories, and we could try `$ conan search poco --remote=conancenter`
-
-```
-Last login: Sat Jun 10 19:27:46 on ttys003
-❯ conan search poco --remote=conancenter
-conancenter
-  poco
-    poco/1.8.1
-    poco/1.9.3
-    poco/1.9.4
-    poco/1.10.0
-    poco/1.10.1
-    poco/1.11.0
-    poco/1.11.1
-    poco/1.11.2
-    poco/1.11.3
-    poco/1.12.0
-    poco/1.12.1
-    poco/1.12.2
-    poco/1.12.3
-    poco/1.12.4
-```
 
 
 
-```
-openssl/1.1.1m: ['"conan-Release-Macos-armv8-apple-clang-14"', 'no-shared', '--prefix="/Users/mbergen/.conan/data/openssl/1.1.1m/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738"', '--openssldir="/Users/mbergen/.conan/data/openssl/1.1.1m/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738/res"', 'no-unit-test', 'threads', 'PERL=perl', 'no-tests', '--release', '-fPIC', 'no-md2']
-Configuring OpenSSL version 1.1.1m (0x101010dfL) for conan-Release-Macos-armv8-apple-clang-14
-Using os-specific seed configuration
-Creating configdata.pm
-Creating Makefile
-
-**********************************************************************
-***                                                                ***
-***   OpenSSL has been successfully configured                     ***
-***                                                                ***
-***   If you encounter a problem while building, please open an    ***
-***   issue on GitHub <https://github.com/openssl/openssl/issues>  ***
-***   and include the output from the following command:           ***
-***                                                                ***
-***       perl configdata.pm --dump                                ***
-***                                                                ***
-***   (If you are new to OpenSSL, you might want to consult the    ***
-***   'Troubleshooting' section in the INSTALL file first)         ***
-***                                                                ***
-**********************************************************************
-```
