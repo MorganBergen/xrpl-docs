@@ -10,7 +10,6 @@
 - [ ] `./rippled --conf testnet_rippled.cfg`
 - [ ] `./rippled server_info --conf testnet_rippled.cfg`
 
-
 ```
 ❯ ps aux | grep rippled
 mbergen          51980  10.6  6.0 410884640 1007936 s001  S+    6:02PM   2:00.89 ./rippled --unittest
