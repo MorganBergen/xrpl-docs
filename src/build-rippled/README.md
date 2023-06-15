@@ -6,10 +6,9 @@
 1.  [server modes](https://xrpl.org/rippled-server-modes.html)
 2.  [`rippled/BUILD.md`](https://github.com/XRPLF/rippled/blob/master/BUILD.md#a-crash-course-in-cmake-and-conan)
 
-- [ ] `./rippled --unittest`
-- [ ] execute `./rippled --conf testnet_rippled.cfg`
-
-`./rippled server_info --conf testnet_rippled.cfg`
+- [x] `./rippled --unittest`
+- [ ] `./rippled --conf testnet_rippled.cfg`
+- [ ] `./rippled server_info --conf testnet_rippled.cfg`
 
 
 ```
