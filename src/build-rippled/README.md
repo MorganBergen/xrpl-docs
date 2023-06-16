@@ -120,18 +120,10 @@ os_build=Macos
 boost/1.77.0:
 boost/1.77.0: ERROR: Package '12a0259a3874809e8c87bd0624bf06329b6d5b82' build failed
 boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release
-ERROR: boost/1.77.0: Error in build() method, line 887
-	self.run(full_command)
-	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
-```
-
-
-
-
-
-
-
-
+    ERROR: boost/1.77.0: Error in build() method, line 887
+self.run(full_command)
+    ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
+    ```
 
 
 
@@ -161,57 +153,6 @@ InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 cmake version 3.26.4
 
 CMake suite maintained and supported by Kitware (kitware.com/cmake).
-```
-
-installing boost
-
-```
-❯ l
-total 16
-drwx------@  5 mbergen  staff   160B Jun 14 15:43 .
-drwxr-x---+ 42 mbergen  staff   1.3K Jun 14 15:44 ..
--rw-r--r--@  1 mbergen  staff   6.0K Jun 14 11:09 .DS_Store
--rw-r--r--   1 mbergen  staff     0B May 27 11:10 .localized
-drwxr-xr-x@ 25 mbergen  staff   800B Jun 14 11:19 boost_1_77_0
-❯ cd boost_1_77_0
-❯ ./bootstrap.sh
-Building B2 engine..
-
-###
-###
-### Using 'clang' toolset.
-###
-###
-
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-.....
-./b2 --prefix=/usr/local
-
-
-❯ brew info boost
-==> boost: stable 1.82.0 (bottled), HEAD
-Collection of portable C++ source libraries
-https://www.boost.org/
-/opt/homebrew/Cellar/boost/1.82.0 (16,057 files, 491.8MB) *
-  Poured from bottle using the formulae.brew.sh API on 2023-06-14 at 15:54:05
-From: https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/boost.rb
-License: BSL-1.0
-==> Dependencies
-Required: icu4c ✔, xz ✔, zstd ✔
-==> Options
---HEAD
-	Install HEAD version
-==> Analytics
-install: 49,904 (30 days), 7,963 (90 days), 1,100,427 (365 days)
-install-on-request: 10,467 (30 days), 4,850 (90 days), 379,749 (365 days)
-build-error: 126 (30 days)
-❯ echo /opt/homebrew/Cellar/boost/1.82.0
-/opt/homebrew/Cellar/boost/1.82.0
-
-
 ```
 
 ##  contents
@@ -256,8 +197,6 @@ technically cmake is unneeded to build rippled.  you could manually compile ever
 `CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.  since I need to be consistent with conan's build type system I will just use a command argument in cli.
 
 ####  `CMAKE_PREFIX_PATH`  
-
-
 
 **parameters include**
 
@@ -641,10 +580,6 @@ ERROR: boost/1.77.0: Error in build() method, line 887
 
 
 
-
-
-
-
 ##  commands for package set up
 
 ####  1.  `git checkout master`
@@ -811,12 +746,6 @@ execute the `rippled` unix binary executable and `--unittest` argument means to 
 unit tests are small isolated tests that check the functionality of a specific part of a program.  
 
 
-
-
-
-
-
-
 ###  console log output from commands
 
 1.  `❯ conan export external/snappy snappy/1.1.9@`  need to understand these lines
@@ -849,7 +778,6 @@ ERROR: 'settings.compiler.runtime' doesn't exist for 'apple-clang'
 ```
 
 ####  troubleshooting
-
 
 conan is in charge of configuring the sources for boost version 1.77.0 and downloads boost archive
 
@@ -909,7 +837,6 @@ the error message is in the build() method on line 887 from boost/1.77.0
 and potentially since conan count locate the correct boost version
 the steps to troubleshoot are to re-run the build command with verbose logging which may help with where the error is coming from
 however, i may want to check the compatability of boost and conan because as it shows in the first warning was from boost 
-
 
 maybe on the 
 
@@ -1099,40 +1026,3 @@ class Xrpl(ConanFile):
             'libsecp256k1.a',
         ]
 ```
-
-
-
-
-
-
-
-
-
-
-###  install conan with pip 
-
-install with python package manager and not homebrew.  conan will be installed globally when using pip.
-
-
-```
-❯ tree .conan2
-❯ tree .conan2
-.conan2
-├── extensions
-│   └── plugins
-│       ├── compatibility
-│       │   ├── compatibility.py
-│       │   └── cppstd_compat.py
-│       └── profile.py
-├── global.conf
-├── p
-│   └── cache.sqlite3
-├── settings.yml
-└── version.txt
-
-5 directories, 7 files
-```
-
-
-
-
