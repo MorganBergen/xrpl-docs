@@ -37,16 +37,11 @@ Memory: 2026MiB / 16384MiB
 ###  dependencies
 
 -  gcc: stable 13.1.0 [GNU compiler collection](https://gcc.gnu.org/)
--  fetched `gmp` [gnu multiple precision arithmetic library](https://gmplib.org)
--  fetched `isl` [integer set library for the polyhedral model](https://libisl.sourceforge.io/)
--  fetched `mpfr` [c library for multiple-precision floating-point computations](https://www.mpfr.org/)
--  fetched `libmpc` [c library for arithmetic of complex num](https://www.multiprecision.org/mpc)
 -  clang 13.0.0 [clang 13 version](https://releases.llvm.org/13.0.0/tools/clang/docs/ReleaseNotes.html)
 -  apple clang [apple clang compiler](https://opensource.apple.com/source/clang/clang-23/clang/tools/clang/docs/UsersManual.html)
 -  msvc [msvc](https://learn.microsoft.com/en-us/cpp/build/reference/compiler-options?view=msvc-170)
 -  cmake [cmake version 3.26.4 with homebrew](https://cmake.org/cmake/help/latest/)
 -  conan@1 [conan@1](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/conan@1.rb)
-
 
 ### problem
 
@@ -125,36 +120,6 @@ self.run(full_command)
     ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
     ```
 
-
-
-
-```
-❯ gcc --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ g++ --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ clang --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ clang++ --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ cmake --version
-cmake version 3.26.4
-
-CMake suite maintained and supported by Kitware (kitware.com/cmake).
-```
-
 ##  contents
 
 1.  [cmake](#cmake)
@@ -188,7 +153,6 @@ technically cmake is unneeded to build rippled.  you could manually compile ever
 4.  **toolchain file** a toolchain file is used to specify platform specific settings, such as the compiler, linker, and other tool locations. it helps ensure consistent configuration across different platforms.
 
 5.  **build configurations**  cmake supports different build configurations, such as debug, release, relwithwebinfo, etc.  these configurations determine the compilation flags, optimization levels, and other settinsg used during the build process.
-
 
 ####  `CMAKE_BUILD_TYPE`
 
@@ -403,7 +367,9 @@ all the commands and instructions provided need to be **adapted** to my specific
 1.  `git checkout master`
 2.  `conan profile new default --detect`
 3.  `conan profile update settings.compiler.cppstd=20 default`
+
 4.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
+
 5.  `conan profile update env.CC=/sr/bin/gcc default` `conan profile update env.CXX=/usr/bin/g++ default`
 
 ##  build
@@ -413,7 +379,6 @@ all the commands and instructions provided need to be **adapted** to my specific
 3.  `cd .build`
 
 4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
-
 
 5.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
 
@@ -551,6 +516,7 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}`
 ```
 brew uninstall conan@1
 brew install https://raw.githubusercontent.com/homebrew/homebrew-core/1fc9e09956a2aa5ee2f2f4f6c81e359c232dee0f/formula/conan.rb
+
 pip install conan==1.59.0
 ❯ conan --version
 Conan version 1.59.0
@@ -573,11 +539,7 @@ boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/bui
 ERROR: boost/1.77.0: Error in build() method, line 887
 	self.run(full_command)
 	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
-
 ```
-
-
-
 
 
 ##  commands for package set up
