@@ -1,4 +1,3 @@
-
 const Promise = require("bluebird");
 const xrpl_lib = require("../xrpl_lib.js");
 const list_deleted = require("./data_pilot_wallets_deleted.js").list_deleted;

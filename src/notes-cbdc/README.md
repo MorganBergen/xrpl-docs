@@ -1,42 +1,74 @@
+#  Palau Monitoring Requierments
 
+###  contents
 
-exposes server info
-and submit
-index.ts
-with chainlink and count make post request
-subnmit is a post request to the server and he wanted that with a get request
-proxity to the apu to the api server
-xrpl-client.ts thsi send the client to the server
+1.  [enviroments](#enviroments)
+2.  [variables](#variables)
+3.  [issues](#issues)
+4.  [unknown trustline #1](#unknown-trustline--1)
 
-test
-api.test.ts
-api.test.ts
+##  enviroments
 
-charts
-dev ops configuration
-every time you deply to teh server 
-gcp needs some configruation in terms of word bucket
+| type | test | production |
+|:----|:----|:----|
+| wss | [wss://s1.cbdc-sandbox.rippletest.net:51233](wss://s1.cbdc-sandbox.rippletest.net:51233) | XRPL Mainnet |
+| rpc | [https://s1.cbdc-sandbox.rippletest.net:51234](http://s1.cbdc-sandbox.rippletest.net:51234) | XRPL Mainnet |
+| toml | undefined | undefined |
+| `issuer_account` | `rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa` | `rwekfW4MiS5yZjXASRBDzzPPWYKuHvKP7E` |
+| `currency` | PSC | PSC |
 
+##  variables
 
-ui
-cfg/config.json has all the settings we need to run in the front end
-front end point into different enviroments 
-settings to connecting to the servers and change as we need
+| identifier | definition |
+|:----------|:----------|
+| `issuer_account` | the account issued the currency being monitored |
+| `currency` | the currency being monitored |
+| `internal_accounts` | accounts in the DCM owned by MOF |
+| `retail_accounts` | accounts of the retailers |
+| `pilot_accounts` | accounts of teh pilot participants |
+| `test_accounts` | accounts owned by Ripple, MoF, Retailers used for tests |
+| `psc_accounts` | every non issuing account with a known psc trustline |
+| `nautilus_accounts` | any wallet created by nautilus |
 
-two different account issuer and the user
-aliases is to translate cross border payment translate that into an aliases
+##  issues
 
-vite is the framework that wraps vue and proxy server one issue you face when you run applications and you run server locally, you run into some issues from a server.  
+<details><summary>1.  call <code>account_lines</code> api for <code>issuer_account</code></summary>
+-  any trustlines not known to pilot alert
+-  alert message must include psc balance and need to freeze
 
-add readme file for scripts
+```
+for (each account_lines.result.lines[].account) {
+    if account.lines.result.lines[i] is not in psc_accounts alert
+}
+```
+</details>
 
-global components with the header and the footer
-make that dynmaic so we can print the version
-components and layout
+<details><summary>2.  subscribe to all <code>pilot_accounts</code> & <code>test_accounts</code></summary></details>
 
-typscript, css, and the view
+<details><summary>3.  subscribe to all <code>retail_accounts</code></summary></details>
 
-vue.js page 
+<details><summary>4.  subscribe to all <code>internal_accounts</code></summary></details>
 
+<details><summary>5.  subscribe to <code>issuer_account</code></summary>
+-  any trustline from an unknown account
+    -  alert
+    -  pseudocode
+-  any transaction outside workflow
+    -  alert
+    -  allowed trxs
+        -  payment
+            -  currency - <code>issuer_account</code>
+        -  TrustSet
+            -  <code>tfSetFreeze</code>
+            -  <code>tfClearFreeze</code>
+        -  SingerListSet
+            -  <code>SingerQuorum</code>
+            -  <code>SignerEntries</code>
+        - pseudocode
+</details>
 
-address the issues better
+<details><summary>6.  call free endpoint</summary>
+-  fees higher than 10 drops
+    -  alert
+    -  pseudocode
+</details>
