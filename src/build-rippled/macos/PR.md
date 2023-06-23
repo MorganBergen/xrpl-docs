@@ -1,7 +1,5 @@
 <!-- Please search existing issues to avoid creating duplicates.-->
 
-#  pull request how do you split the same window in 
-
 ###  high level overview of change
 
 1.  `./conanfile.py` added array for boost versioning options
@@ -18,7 +16,6 @@
 1.  `./conanfile.py` added array for boost versioning options
 2.  `./Build/macos/README.md` provided a readme for reference
 3.  `./Build/macos/reset_conan.sh`
-
 
 
 ## Issue Description
@@ -118,10 +115,6 @@ conanfile.py (xrpl/1.11.0): Generated conaninfo.txt
 conanfile.py (xrpl/1.11.0): Generated graphinfo
 ```
 
-
-
-Behavior should return nothing and cause proper changes to `~/.conan/profile/default`
-
 ## Actual Result
 
 ```
@@ -159,28 +152,58 @@ ERROR: boost/1.77.0: Error in build() method, line 887
 <!-- If you are using a formal release, please use the version returned by './rippled --version' as the version number-->
 <!-- If you are working off of develop, please add the git hash via 'git rev-parse HEAD'-->
 
+-  OS: macOS 13.4 22F66 arm64
+-  Host: MacBookPro18,3
+-  Kernel: 22.5.0
+-  Packages: 56 (brew)
+-  Shell: zsh 5.9
+-  CPU: Apple M1 Pro
+-  Memory: 2026MiB / 16384MiB
 
+-  `gcc --version`
 
-```
-OS: macOS 13.4 22F66 arm64
-Host: MacBookPro18,3
-Kernel: 22.5.0
-Uptime: 20 hours, 55 mins
-Packages: 56 (brew)
-Shell: zsh 5.9
-Terminal: iTerm2
-Terminal Font: MesloLGS-NF-Regular 13
-CPU: Apple M1 Pro
-Memory: 2026MiB / 16384MiB
-```
+    Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+    Target: arm64-apple-darwin22.5.0
+    Thread model: posix
+    InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+
+-  `g++ --version`
+
+    Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+    Target: arm64-apple-darwin22.5.0
+    Thread model: posix
+    InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+
+-  `clang --version`
+
+    Apple clang version 14.0.3 (clang-1403.0.22.14.1)
+    Target: arm64-apple-darwin22.5.0
+    Thread model: posix
+    InstalledDir: /Library/Developer/CommandLineTools/usr/bin
+
+-  `cmake --version`
+
+    cmake version 3.26.4
+    CMake suite maintained and supported by Kitware (kitware.com/cmake).
+
+-  `brew info boost`
+
+    ==> boost: stable 1.82.0 (bottled), HEAD
+    Collection of portable C++ source libraries
+    https://www.boost.org/
+    /opt/homebrew/Cellar/boost/1.82.0 (16,057 files, 491.8MB) *
+
+-  `./rippled --version`
+
+    rippled version 1.11.0
+
+-  `git branch master`
 
 ## Supporting Files
 <!--If you have supporting files such as a log, feel free to post a link here using Github Gist.-->
 <!--Consider adding configuration files with private information removed via Github Gist. -->
 
 # ConanException:  build process for the Boost library failed during the execution of the b2
-
-I may have a congruent issue, however I'm not sure.
 
 ## workflow
 
@@ -278,28 +301,3 @@ Memory: 2026MiB / 16384MiB
 	
 ##  tools on system
 
-```
-❯ gcc --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ g++ --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ clang --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ clang++ --version
-Apple clang version 14.0.3 (clang-1403.0.22.14.1)
-Target: arm64-apple-darwin22.5.0
-Thread model: posix
-InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-❯ cmake --version
-cmake version 3.26.4
-CMake suite maintained and supported by Kitware (kitware.com/cmake).
-``` 
