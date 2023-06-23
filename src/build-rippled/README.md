@@ -83,7 +83,9 @@ technically cmake is unneeded to build rippled.  you could manually compile ever
 
 `CMAKE_BUILD_TYPE` must match `build_type`
 
-`CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  in this case the generated build system such as Makefiles or VS project may use its default build configuration, which varies depending on the system or generator.  since I need to be consistent with conan's build type system I will just use a command argument in cli.
+`CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  
+
+in this case the generated build system such as Makefiles or VSC project may use its default build configuration, which varies depending on the system or generator.   
 
 ####  `CMAKE_PREFIX_PATH`  
 

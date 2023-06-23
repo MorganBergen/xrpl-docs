@@ -18,6 +18,8 @@ by running the "docker pull" command with the specified image name, you would do
 
 **containers** are instances of docker images that can be run on a host system.  each container is isolated from other containers and the host system, providing process-level isolation and ensuring that applications run consistently across different enviroments.
 
+When running a container, it uses an isolated filesystem. This custom filesystem is provided by a container image. Since the image contains the container's filesystem, it must include everything needed to run the application - all dependencies, configuration, scripts, binaries, etc. The image also contains other configuration for the container, such as environment variables, a default command to run, and other metadata.
+
 **Dockerfile**  a docker file is a text file that contains a set of instructions for building a docker image.  it specifies the base image, adds application code and dependencies, and defines configurations and settings.  think about it this way... a dockerfile is alot like a makefile!  dockerfiles are specific to docker image creation and containerization, while makefiles are of course a more general purpose build automation tool for compilation.
 
 you use docker to develop apps within a container, containers are runtime enviroments.  think of containers like virtual machines, VMs emulate an entire operating system, while containers share the host system's kernel.  the kernel is the central component of an OS and is the core part that manages the system's resources and acts as the bridge between the hardware and software layers of a the system

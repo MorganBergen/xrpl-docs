@@ -1,10 +1,21 @@
-#  pull request
+#  pull requesthow do you split the same window in 
 
 ###  high level overview of change
 
+1.  `./conanfile.py` added array for boost versioning options
+2.  `./Build/macos/README.md` provided a readme for reference
+3.  `./Build/macos/reset_conan.sh`
+
 ###  type of change
 
+1.  documentation
+2.  build sources
+
 ###  modules affected
+
+1.  `./conanfile.py` added array for boost versioning options
+2.  `./Build/macos/README.md` provided a readme for reference
+3.  `./Build/macos/reset_conan.sh`
 
 #  build rippled server software from source
 
@@ -17,14 +28,10 @@
 3.  [dependencies](#dependencies) 
 4.  [cmake](#cmake)
 5.  [conan](#conan)
-6.  [`CMakeLists.txt`](#cmakelists-txt)
-7.  [`CMAKE_BUILD_TYPE`](#cmake_build_type)
-8.  [`CMAKE_PREFIX_PATH`](#cmake_prefix_path)
 9.  [`~/.conan/profiles/default`](#conan-profiles-default)
 10. [cmake and conan](#cmake-and-conan)
 11. [package setup commands](#package-set-up-commands)
 12. [build commands](#build-commands)
-13. [troubleshooting](#troubleshooting)
 14. [`rippled/conanfile.py`](#rippled-conanfile-py)
 15. [running the binary executable](#running-the-binary-executable)
 
@@ -105,12 +112,158 @@ however it's important to note that cmake parameters are excluded, you must sele
 
 ##  `CMakeLists.txt`
 
-```
-```
+<details><summary>view</summary>
+<code>cmake_minimum_required(VERSION 3.16)
+
+if(POLICY CMP0074)
+  cmake_policy(SET CMP0074 NEW)
+endif()
+if(POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+endif()
+
+# Fix "unrecognized escape" issues when passing CMAKE_MODULE_PATH on Windows.
+file(TO_CMAKE_PATH "${CMAKE_MODULE_PATH}" CMAKE_MODULE_PATH)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/Builds/CMake")
+
+project(rippled)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# make GIT_COMMIT_HASH define available to all sources
+find_package(Git)
+if(Git_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=40
+        OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE gch)
+    if(gch)
+        set(GIT_COMMIT_HASH "${gch}")
+        message(STATUS gch: ${GIT_COMMIT_HASH})
+        add_definitions(-DGIT_COMMIT_HASH="${GIT_COMMIT_HASH}")
+    endif()
+endif() #git
+
+if(thread_safety_analysis)
+  add_compile_options(-Wthread-safety -D_LIBCPP_ENABLE_THREAD_SAFETY_ANNOTATIONS -DRIPPLE_ENABLE_THREAD_SAFETY_ANNOTATIONS)
+  add_compile_options("-stdlib=libc++")
+  add_link_options("-stdlib=libc++")
+endif()
+
+include (CheckCXXCompilerFlag)
+include (FetchContent)
+include (ExternalProject)
+include (CMakeFuncs) # must come *after* ExternalProject b/c it overrides one function in EP
+include (ProcessorCount)
+if (target)
+  message (FATAL_ERROR "The target option has been removed - use native cmake options to control build")
+endif ()
+
+include(RippledSanity)
+include(RippledVersion)
+include(RippledSettings)
+include(RippledRelease)
+# this check has to remain in the top-level cmake
+# because of the early return statement
+if (packages_only)
+  if (NOT TARGET rpm)
+    message (FATAL_ERROR "packages_only requested, but targets were not created - is docker installed?")
+  endif()
+  return ()
+endif ()
+include(RippledCompiler)
+include(RippledInterface)
+
+option(only_docs "Include only the docs target?" FALSE)
+include(RippledDocs)
+if(only_docs)
+  return()
+endif()
+
+###
+
+include(deps/Boost)
+find_package(OpenSSL 1.1.1 REQUIRED)
+set_target_properties(OpenSSL::SSL PROPERTIES
+  INTERFACE_COMPILE_DEFINITIONS OPENSSL_NO_SSL2
+)
+add_subdirectory(src/secp256k1)
+add_subdirectory(src/ed25519-donna)
+find_package(lz4 REQUIRED)
+# Target names with :: are not allowed in a generator expression.
+# We need to pull the include directories and imported location properties
+# from separate targets.
+find_package(LibArchive REQUIRED)
+find_package(SOCI REQUIRED)
+find_package(SQLite3 REQUIRED)
+find_package(Snappy REQUIRED)
+
+option(rocksdb "Enable RocksDB" ON)
+if(rocksdb)
+  find_package(RocksDB REQUIRED)
+  set_target_properties(RocksDB::rocksdb PROPERTIES
+    INTERFACE_COMPILE_DEFINITIONS RIPPLE_ROCKSDB_AVAILABLE=1
+  )
+  target_link_libraries(ripple_libs INTERFACE RocksDB::rocksdb)
+endif()
+
+find_package(nudb REQUIRED)
+find_package(date REQUIRED)
+include(deps/Protobuf)
+include(deps/gRPC)
+
+target_link_libraries(ripple_libs INTERFACE
+  ed25519::ed25519
+  LibArchive::LibArchive
+  lz4::lz4
+  nudb::core
+  OpenSSL::Crypto
+  OpenSSL::SSL
+  Ripple::grpc_pbufs
+  Ripple::pbufs
+  secp256k1::secp256k1
+  soci::soci
+  SQLite::SQLite3
+)
+
+if(reporting)
+  find_package(cassandra-cpp-driver REQUIRED)
+  find_package(PostgreSQL REQUIRED)
+  target_link_libraries(ripple_libs INTERFACE
+    cassandra-cpp-driver::cassandra-cpp-driver
+    PostgreSQL::PostgreSQL
+  )
+endif()
+
+###
+
+include(RippledCore)
+include(RippledInstall)
+include(RippledCov)
+include(RippledMultiConfig)
+include(RippledValidatorKeys)</code>
+<details>
 
 ##  `CMAKE_PREFIX_PATH`
 
+**parameters include**
+
+-  what build system to generate files for
+-  where to find the compiler and linker
+-  where to find dependencies, e.g. libraries and headers
+-  how to link dependencies e.g. any special compiler or linker flags that need to be used with them, including preprocessor definition
+-  how to compile translation units with optimizations, debug symbols, position independent code, etc
+
+for some of these parameters, like the build system and compiler, cmake goes through a complicated search process to choose default values.  for other like the dependencies, we had written in the cmake config files of this project to our own complicated process to choose defaults.
+
+you can pass every parameter to cmake on the command line, but writing out these parameters everytime we want to configure cmake is a pain.  once you configure a file once cmake can read everytime it is configured, which is a toolchain file.
+
+a toolchain is a set of utilities to compile, link libraries, and creat archives, and other tasks to drive the build.  the toolchain utilities available are determined by the languages enabled.
+
 ##  `CMAKE_BUILD_TYPE`
+
+`CMAKE_BUILD_TYPE` must match `build_type`.  `CMAKE_BUILD_TYPE` is a cmake variable that defines the build type or configuration for your cmake project.  it allows you to specify different build configuration such as debug, release, or custom configurations specific to your project.   if you dont specify the `CMAKE_BUILD_TYPE` var, cmake uses an empty string as the build type.  
+
+in this case the generated build system such as Makefiles or VSC project may use its default build configuration, which varies depending on the system or generator.   
 
 ##  cmake and conan
 
@@ -132,23 +285,9 @@ before we start we need to ensure to define the directory paths of our compiler 
 
 3.  `which g++`
 
-4.  `get checkout master`
+4.  `git checkout master`
 
 5.  `conan profile new default --detect`
-
-6.  `conan profile update settings.compiler.cppstd=20 default`
-
-7.  `conan profile update env.CC=/usr/bin/gcc default`
-
-8.  `conan profile update env.CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
-
-9.  `conan profile update env.CXX=/usr/bin/g++ default`
-
-10.  `conan profile update env.CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
-
-11.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
-
-12.  `conan profile update -o boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT"`
 
 once completed the following profile should reflect that of your own.  once a profile is created, it can be used in a build, the conan install command downloads or builds the necessary packages according to the settings specified in the profile.  when calling `conan profile new default --detect` your shell should return a message declaring the location of the module within the `conan` profiles directory as a text file within your local system.
 
@@ -158,6 +297,21 @@ Found apple-clang 14.0
 apple-clang>=13, using the major as version
 Profile created with detected settings: /Users/.conan/profiles/default
 ```
+
+6.  `conan profile update settings.compiler.cppstd=20 default`
+
+7.  `conan profile update env.CC=/usr/bin/gcc default`
+
+8.  `conan profile update env.CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
+
+9.  `conan profile update env.CXX=/usr/bin/g++ default`
+
+10. `conan profile update env.CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
+
+11.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
+
+12.  `conan profile update -o boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT"`
+
 
 ##  `~/.conan/profiles/default`(#conan-profiles-default)
 
@@ -186,11 +340,19 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 
 ##  reset conan package setup
 
-1.  `pwd rippled`
-2.  `rm -rf ~/.conan/data`
-3.  `rm -rf ~/.conan/conan.conf`
-4.  `rm -rf ~/.conan/profiles`
-5.  `rm -r .build`
+`reset_conan.sh`, has scripts containing commands to reset your conan profile.  ensure to call `which conan` in order to determine your `.conan` directory is not located in your local machine's root directory.
+
+1.  `chmod +x reset_conan.sh` to make the script executable
+
+2.  `./reset_conan.sh`
+
+```bash
+`pwd rippled`
+`rm -rf ~/.conan/data`
+`rm -rf ~/.conan/conan.conf`
+`rm -rf ~/.conan/profiles`
+`rm -r .build`
+```
 
 ##  build commands
 
@@ -443,42 +605,7 @@ the console log output from `./rippled --unittest` is the result of the built-in
 
 ```
 ./rippled --unittest
-ripple.tx.Offer Removing Canceled Offers
-ripple.tx.Offer Incorrect Removal of Funded Offers
-ripple.tx.Offer Tiny payments
-ripple.tx.Offer XRP Tiny payments
-ripple.tx.Offer Enforce No Ripple
-ripple.tx.Offer Insufficient Reserve
-rippled.app.ShardArchiveHandler testSingleDownloadAndStateDB
-ripple.app.TheoreticalQuality Relative quality distance
-ripple.tx.NFTokenBurn Burn random
-ripple.app.AccountDelete Basics
-ripple.app.Flow limitQuality
-ripple.app.ReportingETL GetLedger
-ripple.app.ReportingETL GetLedgerData
-ripple.app.ReportingETL GetLedgerDiff
-ripple.app.ReportingETL GetLedgerDiff
-ripple.app.ReportingETL NeedCurrentOrClosed
-ripple.app.ReportingETL SecureGateway
-ripple.app.ValidatorSite Config Load
-ripple.app.ValidatorSite Fetch list - /validators [https] v1
-ripple.app.ValidatorSite File list - /Users/mbergen/Documents/Github/rippled/.build/test_val2/vl.txt, /Users/mbergen/Documents/Github/rippled/.build/test_val3/helloworld.txt
-ripple.tx.NFToken Enabled
-ripple.app.AccountSet No AccountSet
-ripple.app.Book One Side Empty Book
-ripple.app.LedgerData
-ripple.appLdgerReplayer ProofPath
-WRN:Application Server stopping
-ripple.app.TxQ1 queue sequence
-ripple.tx.Taker XRP Quantization: output
-ripple.tx.Taker IOU to IOU
-ripple.tx.ThinBook
-ripple.tx.Ticket Feature Not Enabled
-ripple.tx.Ticket Create Tickets that fail Preflight
-ripple.tx.Ticket Create Tickets that fail Preclaim
-ripple.tx.Ticket Create Ticket Insufficient Reserve
-ripple.tx.Ticket Using Tickets
-ripple.tx.Ticket Transaction Database With Tickets
+....
 ripple.tx.Ticket Sign with TicketSequence
 ripple.tx.Ticket Fix both Seq and Ticket
 
