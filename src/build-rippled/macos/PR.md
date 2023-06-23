@@ -1,26 +1,20 @@
 <!-- Please search existing issues to avoid creating duplicates.-->
-
 ###  high level overview of change
 
 1.  `./conanfile.py` added array for boost versioning options
 2.  `./Build/macos/README.md` provided a readme for reference
 3.  `./Build/macos/reset_conan.sh`
+4.  `./Build/macos/default`
 
 ###  type of change
 
 1.  documentation
 2.  build sources
-
-###  modules affected
-
-1.  `./conanfile.py` added array for boost versioning options
-2.  `./Build/macos/README.md` provided a readme for reference
-3.  `./Build/macos/reset_conan.sh`
-
+3.  dependencies helper files
 
 ## Issue Description
 
-Thrown Exception from from calling, `conan install .. --output-folder . --build missing --settings build_type=Release`.  `ConanException: build process for the Boost library failed during the execution of the b2`
+Runtime Error from Thrown Exception via calling, `conan install .. --output-folder . --build missing --settings build_type=Release`.  `ConanException: build process for the Boost library failed during the execution of the b2`
 
 ## Steps to Reproduce
 <!--List in detail the exact steps to reproduce the unexpected behavior of the software.-->
@@ -30,8 +24,6 @@ Thrown Exception from from calling, `conan install .. --output-folder . --build 
 Found apple-clang 14.0
 apple-clang>=13, using the major as version
 Profile created with detected settings: /Users/mbergen/.conan/profiles/default
-❯ conan profile update settings.compiler.cppstd=20 default
-❯ conan profile update settings.compiler.cppstd=20 default
 ❯ conan profile update settings.compiler.cppstd=20 default
 ❯ l
 total 640
@@ -160,31 +152,26 @@ ERROR: boost/1.77.0: Error in build() method, line 887
 -  CPU: Apple M1 Pro
 -  Memory: 2026MiB / 16384MiB
 
--  `gcc --version`
+-  `gcc --v`
 
     Apple clang version 14.0.3 (clang-1403.0.22.14.1)
     Target: arm64-apple-darwin22.5.0
     Thread model: posix
     InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
--  `g++ --version`
+-  `g++ --v`
 
     Apple clang version 14.0.3 (clang-1403.0.22.14.1)
     Target: arm64-apple-darwin22.5.0
     Thread model: posix
     InstalledDir: /Library/Developer/CommandLineTools/usr/bin
 
--  `clang --version`
+-  `clang --v`
 
     Apple clang version 14.0.3 (clang-1403.0.22.14.1)
     Target: arm64-apple-darwin22.5.0
     Thread model: posix
     InstalledDir: /Library/Developer/CommandLineTools/usr/bin
-
--  `cmake --version`
-
-    cmake version 3.26.4
-    CMake suite maintained and supported by Kitware (kitware.com/cmake).
 
 -  `brew info boost`
 
@@ -193,17 +180,20 @@ ERROR: boost/1.77.0: Error in build() method, line 887
     https://www.boost.org/
     /opt/homebrew/Cellar/boost/1.82.0 (16,057 files, 491.8MB) *
 
--  `./rippled --version`
+-  `cmake version 3.26.4`
 
-    rippled version 1.11.0
+-  `Conan version 1.59.0`
+
+-  `Python 3.11.4`
+
+-  `rippled version 1.11.0`
 
 -  `git branch master`
 
 ## Supporting Files
 <!--If you have supporting files such as a log, feel free to post a link here using Github Gist.-->
-<!--Consider adding configuration files with private information removed via Github Gist. -->
 
-# ConanException:  build process for the Boost library failed during the execution of the b2
+<!--Consider adding configuration files with private information removed via Github Gist. -->
 
 ## workflow
 
@@ -252,52 +242,6 @@ snappy/1.1.9: Exported revision: d64c117aaa6d3a61064ba8cec8212db6
 ❯ cd .build
 ```
 
-## problem
+###  congruent problems
 
-```
-❯ conan install .. --output-folder . --build missing --settings build_type=Release
-Configuration:
-[settings]
-arch=armv8
-arch_build=armv8
-build_type=Release
-compiler=apple-clang
-compiler.cppstd=20
-compiler.libcxx=libc++
-compiler.version=14
-os=Macos
-os_build=Macos
-[options]
-[build_requires]
-[env]
-
-boost/1.77.0: Not found in local cache, looking in remotes...
-......
-
-35 warnings and 1 error generated.
-...failed updating 2 targets...
-boost/1.77.0:
-boost/1.77.0: ERROR: Package '12a0259a3874809e8c87bd0624bf06329b6d5b82' build failed
-boost/1.77.0: WARN: Build folder /Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release
-ERROR: boost/1.77.0: Error in build() method, line 887
-	self.run(full_command)
-	ConanException: Error 1 while executing b2 -q numa=on target-os=darwin architecture=arm address-model=64 binary-format=mach-o abi=aapcs --layout=system --user-config=/Users/mbergen/.conan/data/boost/1.77.0/_/_/source/src/tools/build/user-config.jam -sNO_ZLIB=0 -sNO_BZIP2=0 -sNO_LZMA=1 -sNO_ZSTD=1 boost.locale.icu=off --disable-icu boost.locale.iconv=on boost.locale.iconv.lib=libiconv threading=multi visibility=global link=static variant=release --with-atomic --with-chrono --with-container --with-context --with-contract --with-coroutine --with-date_time --with-exception --with-fiber --with-filesystem --with-graph --with-iostreams --with-json --with-locale --with-log --with-math --with-nowide --with-program_options --with-random --with-regex --with-serialization --with-stacktrace --with-system --with-test --with-thread --with-timer --with-type_erasure --with-wave toolset=clang-darwin cxxflags=-std=c++20 pch=on -sLIBBACKTRACE_PATH=/Users/mbergen/.conan/data/libbacktrace/cci.20210118/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 -sICONV_PATH=/Users/mbergen/.conan/data/libiconv/1.17/_/_/package/240c2182163325b213ca6886a7614c8ed2bf1738 linkflags="-stdlib=libc++" cxxflags="-fPIC -stdlib=libc++ -DBOOST_STACKTRACE_ADDR2LINE_LOCATION=/usr/bin/addr2line" install --prefix=/Users/mbergen/.conan/data/boost/1.77.0/_/_/package/12a0259a3874809e8c87bd0624bf06329b6d5b82 -j8 --abbreviate-paths -d0 --debug-configuration --build-dir="/Users/mbergen/.conan/data/boost/1.77.0/_/_/build/12a0259a3874809e8c87bd0624bf06329b6d5b82/build-release"
-```
-
-## system's hardware and software configuration
-
-```
-OS: macOS 13.4 22F66 arm64
-Host: MacBookPro18,3
-Kernel: 22.5.0
-Uptime: 20 hours, 55 mins
-Packages: 56 (brew)
-Shell: zsh 5.9
-Terminal: iTerm2
-Terminal Font: MesloLGS-NF-Regular 13
-CPU: Apple M1 Pro
-Memory: 2026MiB / 16384MiB
-```
-	
-##  tools on system
-
+issues https://github.com/XRPLF/rippled/issues/4580

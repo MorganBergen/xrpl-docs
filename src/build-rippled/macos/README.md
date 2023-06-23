@@ -1,22 +1,3 @@
-#  pull requesthow do you split the same window in 
-
-###  high level overview of change
-
-1.  `./conanfile.py` added array for boost versioning options
-2.  `./Build/macos/README.md` provided a readme for reference
-3.  `./Build/macos/reset_conan.sh`
-
-###  type of change
-
-1.  documentation
-2.  build sources
-
-###  modules affected
-
-1.  `./conanfile.py` added array for boost versioning options
-2.  `./Build/macos/README.md` provided a readme for reference
-3.  `./Build/macos/reset_conan.sh`
-
 #  build rippled server software from source
 
 `rippled` written in c++ is the server software that powers the xrp ledger and runs on a variety of differing platforms.  the `rippled` server software can run in several modes depending on its configuration, here are instructions on how to build `rippled` from source as well as learn how cmake and conan behave in the compilation process.
@@ -28,14 +9,15 @@
 3.  [dependencies](#dependencies) 
 4.  [cmake](#cmake)
 5.  [conan](#conan)
-9.  [`~/.conan/profiles/default`](#conan-profiles-default)
-10. [cmake and conan](#cmake-and-conan)
-11. [package setup commands](#package-set-up-commands)
-12. [build commands](#build-commands)
-14. [`rippled/conanfile.py`](#rippled-conanfile-py)
-15. [running the binary executable](#running-the-binary-executable)
+6.  [`~/.conan/profiles/default`](#conan-profiles-default)
+7.  [cmake and conan](#cmake-and-conan)
+8.  [package setup commands](#package-set-up-commands)
+9.  [build commands](#build-commands)
+10. [`rippled/conanfile.py`](#rippled-conanfile-py)
+11. [running the binary executable](#running-the-binary-executable)
+12. [console log output from commands](#console-log-output-from-commands)
 
------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------
 
 ##  references
 
@@ -338,7 +320,6 @@ CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
 tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 ```
 
-
 ##  build commands
 
 1.  `pwd rippled`
@@ -463,21 +444,69 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 
 ###  6.  `conan profile update env.CC=/usr/bin/gcc default`
 
+
 ###  7.  `conan profile update env.CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
 ###  8.  `conan profile update env.CXX=/usr/bin/g++ default`
 ###  9.  `conan profile update env.CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
 ###  10.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
 ###  
 ###  11.  `conan profile update -o boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT"`
+
 ###  12.  `pwd rippled`
+
 ###  13.  `conan export external/snappy snappy/1.1.9@`
+
+export our conan recipe for snappy, this doesnt explicitly link the c++ standard library, which allows us to statically link it.
+
+snappy is a fast compression/decompression library developed by google, it aims to provide high speed data processing iwth a reasonable compression ratio (i do not have knowledge in compression/decompression tools however ill just blockbox).  `conanfile.py` is exported to snappy which is located in the `external/snappy` directory to the local conan cache.  and `snappy/1.1.9@` is the reference for the recipe in the local conan cache.  `rippled/external/snappy/`
+
 ###  14.  `mkdir .build`
+
 ###  15.  `cd .build`
+
+by default the install folder is your current working directory.  if you don't move into your build directory before calling Conan, then you may see it polluting your project root directory with these files  to make conan put them in your build directory youll have to add the options `--install-folder` or `-if` to every `conan install` command
+
 ###  16.  `conan install .. --output-folder . --build missing --settings build_type=Release`
+
+1.  `conan install ..` tells conan to install the dependencies listed in the `conanfile.py`
+2.  `--output-folder .` this argument is specifying that the output from this command should be placed in the current directory which is `.`
+3.  `--build missing` tells conan to build any dependencies that are missing from conan's cache, essentially the cache is located here `~/.conan/conan.conf` and will be written out under the `[storage]` section 
+4.  `--settings build_type=Release` argument tells conan to build the dependencies for a release build
+
 ###  17.  `cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=/build/generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release ..`
+
+1.  `cmake` command to run the cmake tool which is a build system generator whcih reads the `CMakeLists.txt` file that you write and generate build files for a build tool of your choice like Make
+
+2.  `-D` is used to define a variable that will be passed into the CMake script so `-DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_toolchain.cmake` is telling CMake to use a specific toolchain file which should exist after running the previous commands before 4
+
+a toolchain file is a script that cmake reads before your main `CMakeLists.txt` and is used to set up the compiler and other tools like linkers that will be used to build the project.  the toolchain file is often used when cross-compiling which is wehn  you are building code on one type of system (the host), such that it can be executed on a different type of system (the target).  this is common when you have limited resources.  the cross compiler produces binaries that can be executed on a specific argitecture.  CMAKE's toolchain file handles all of these complexities and specifies the deatils about the target system and the cross compiler to be used, which cmake then uses when generating the build files.
+
+3.  `conan_toolchain.cmake` is a toolchain file that was generated by conan.  it sets up the tools and settinsg taht conan has figure out for the project based on the dep and settings in `conanfile.py`
+
+4.  `-DCMAKE_BUILD_TYPE=Release` sets the build type to `Release`, this typically means that the code will be optimized for speed and the debug info will be removed making the binaries smaller!!  
+
+5.  `..` at the end of the command is specifying the source directory of the project which is the parent directory of build which were currently in when running the 4th command.
+
+**Note**  ensure to run cmake from the `.build` directory, to maintain [modularity](https://en.wikipedia.org/wiki/Modular_programming)
+
 ###  18.  `cmake --build .` 
+
+final invokation for the underlying build system to compile into the unix binary executable `rippled`.
+
 ###  19.  `./rippled --version`
 ###  20.  `./rippled --unittest` 
+
+execute the `rippled` unix binary executable and `--unittest` argument means to run the program's unit tests.  unit tests are small isolated tests that check the functionality of a specific part of a program.  
+
+###  console log output from commands
+
+
+
+[ 99%] Building CXX object CMakeFiles/rippled.dir/src/test/shamap/SHAMapSync_test.cpp.o
+[100%] Building CXX object CMakeFiles/rippled.dir/src/test/shamap/SHAMap_test.cpp.o
+[100%] Building CXX object CMakeFiles/rippled.dir/src/test/unit_test/multi_runner.cpp.o
+[100%] Linking CXX executable rippled
+[100%] Built target rippled
 
 ##  running the binary executable
 
@@ -507,7 +536,6 @@ RPC Client Options:
                          port number for RPC command.
 
 Ledger/Data Options:
-  --import               Import an existing node database (specified in the
                          [import_db] configuration file section) into the
                          current node database (specified in the [node_db]
                          configuration file section).

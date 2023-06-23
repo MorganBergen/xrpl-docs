@@ -213,16 +213,6 @@ sample output:
 
 
 
-
-
-
-
-
-
-
-
-
-
 - [ ]  generate the keys for each of your validator nodes by using the `validator-keys` tool provided with `rippled`
 
 ```
