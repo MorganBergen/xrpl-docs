@@ -55,6 +55,50 @@ snappy/1.1.9: Exported revision: d64c117aaa6d3a61064ba8cec8212db6
 ## Expected Result
 <!--Explain in detail what behavior you expected to happen.-->
 
+`conan install .. --output-folder . --build missing --settings build_type="Release"`
+
+```
+Configuration:
+[settings]
+arch=armv8
+arch_build=armv8
+build_type=Release
+compiler=apple-clang
+compiler.cppstd=20
+compiler.libcxx=libc++
+compiler.version=14
+os=Macos
+os_build=Macos
+[options]
+boost:extra_b2_flags=define=BOOST_ASIO_HAS_STD_INVOKE_RESULT
+[build_requires]
+[env]
+CC=/usr/bin/gcc
+CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
+CXX=/usr/bin/g++
+CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
+[conf]
+tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
+...
+soci/4.0.3 package(): Packaged 1 '.txt' file: LICENSE_1_0.txt
+soci/4.0.3 package(): Packaged 49 '.h' files
+soci/4.0.3 package(): Packaged 2 '.a' files: libsoci_sqlite3.a, libsoci_core.a
+soci/4.0.3: Package '92bf3150b7bf55000cc57d7621955101b2fb594e' created
+soci/4.0.3: Created package revision dfa718277f4f9c88e33e67290d4fcac7
+conanfile.py (xrpl/1.11.0): WARN: Using the new toolchains and generators without specifying a build profile (e.g: -pr:b=default) is discouraged and might cause failures and unexpected behavior
+conanfile.py (xrpl/1.11.0): Generator 'CMakeDeps' calling 'generate()'
+conanfile.py (xrpl/1.11.0): Generator txt created conanbuildinfo.txt
+conanfile.py (xrpl/1.11.0): Calling generate()
+conanfile.py (xrpl/1.11.0): WARN: Using the new toolchains and generators without specifying a build profile (e.g: -pr:b=default) is discouraged and might cause failures and unexpected behavior
+conanfile.py (xrpl/1.11.0): Preset 'release' added to CMakePresets.json. Invoke it manually using 'cmake --preset release'
+conanfile.py (xrpl/1.11.0): If your CMake version is not compatible with CMakePresets (<3.19) call cmake like: 'cmake <path> -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=/Users/mbergen/Documents/Github/rippled/.build/build/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=Release'
+conanfile.py (xrpl/1.11.0): Aggregating env generators
+conanfile.py (xrpl/1.11.0): Generated conaninfo.txt
+conanfile.py (xrpl/1.11.0): Generated graphinfo
+```
+
+
+
 Behavior should return nothing and cause proper changes to `~/.conan/profile/default`
 
 ## Actual Result

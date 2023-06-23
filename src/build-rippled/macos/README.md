@@ -304,13 +304,13 @@ Profile created with detected settings: /Users/.conan/profiles/default
 
 8.  `conan profile update env.CFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
 
-9.  `conan profile update env.CXX=/usr/bin/g++ default`
+9.  `conan profile update env.cxx=/usr/bin/g++ default`
 
 10. `conan profile update env.CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1 default`
 
 11.  `conan profile update 'conf.tools.build:compiler_executables={"c": "/usr/bin/gcc", "cpp": "/usr/bin/g++"}' default`
 
-12.  `conan profile update -o boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT"`
+12.  `conan profile update options.boost:extra_b2_flags="define=BOOST_ASIO_HAS_STD_INVOKE_RESULT" default`
 
 
 ##  `~/.conan/profiles/default`(#conan-profiles-default)
@@ -338,21 +338,6 @@ CXXFLAGS=-DBOOST_ASIO_HAS_STD_INVOKE_RESULT=1
 tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 ```
 
-##  reset conan package setup
-
-`reset_conan.sh`, has scripts containing commands to reset your conan profile.  ensure to call `which conan` in order to determine your `.conan` directory is not located in your local machine's root directory.
-
-1.  `chmod +x reset_conan.sh` to make the script executable
-
-2.  `./reset_conan.sh`
-
-```bash
-`pwd rippled`
-`rm -rf ~/.conan/data`
-`rm -rf ~/.conan/conan.conf`
-`rm -rf ~/.conan/profiles`
-`rm -r .build`
-```
 
 ##  build commands
 
@@ -384,6 +369,22 @@ cmake -DCMAKE_TOOLCHAIN_FILE:FILEPATH=build/generators/conan_tollchain.cmake -DC
 -- Configuring done (1.4s)
 -- Generating done (0.1s)
 -- Build files have been written to: /Users/mbergen/Documents/Github/rippled/.build
+```
+
+##  reset conan package setup
+
+`reset_conan.sh`, has scripts containing commands to reset your conan profile.  ensure to call `which conan` in order to determine your `.conan` directory is not located in your local machine's root directory.
+
+1.  `chmod +x reset_conan.sh` to make the script executable
+
+2.  `./reset_conan.sh`
+
+```bash
+`pwd rippled`
+`rm -rf ~/.conan/data`
+`rm -rf ~/.conan/conan.conf`
+`rm -rf ~/.conan/profiles`
+`rm -r .build`
 ```
 
 ##  command walkthrough
