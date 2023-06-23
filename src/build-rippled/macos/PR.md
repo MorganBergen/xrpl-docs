@@ -1,5 +1,26 @@
 <!-- Please search existing issues to avoid creating duplicates.-->
 
+#  pull request how do you split the same window in 
+
+###  high level overview of change
+
+1.  `./conanfile.py` added array for boost versioning options
+2.  `./Build/macos/README.md` provided a readme for reference
+3.  `./Build/macos/reset_conan.sh`
+
+###  type of change
+
+1.  documentation
+2.  build sources
+
+###  modules affected
+
+1.  `./conanfile.py` added array for boost versioning options
+2.  `./Build/macos/README.md` provided a readme for reference
+3.  `./Build/macos/reset_conan.sh`
+
+
+
 ## Issue Description
 
 Thrown Exception from from calling, `conan install .. --output-folder . --build missing --settings build_type=Release`.  `ConanException: build process for the Boost library failed during the execution of the b2`
