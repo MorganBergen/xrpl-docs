@@ -33,14 +33,34 @@
 ##  issues
 
 <details><summary>1.  call <code>account_lines</code> api for <code>issuer_account</code></summary>
+
 -  any trustlines not known to pilot alert
 -  alert message must include psc balance and need to freeze
 
+find the api or the list of function calls i can use in order
+to make this alert message that will probably be within serverInfo.ts
+go through the list of accounts 
+if an account != a psc_account
+then provide console log alert regarding transaction
+
+
 ```
+// serverInfo.ts
+
 for (each account_lines.result.lines[].account) {
     if account.lines.result.lines[i] is not in psc_accounts alert
 }
 ```
+
+
+
+
+
+
+
+
+
+
 </details>
 
 <details><summary>2.  subscribe to all <code>pilot_accounts</code> & <code>test_accounts</code></summary></details>
@@ -72,3 +92,19 @@ for (each account_lines.result.lines[].account) {
     -  alert
     -  pseudocode
 </details>
+
+
+###  questions to address 
+
+call account_lines api for issuer_account
+any trustline not known to pilot alert
+alert message must include psc balance and need to freeze
+
+1.  what does he mean by call an api?
+
+declare preprocessor directive of library `xrpl`
+
+
+
+
+

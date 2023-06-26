@@ -1,32 +1,3 @@
-#  mainnet response
-
-###  test
-
-```javascript
-const xrpl = require('xrpl')
-
-async function main() {
-    const api = new xrpl.Client('wss://xrplcluster.com/')
-    await api.connect()
-
-    let responses = await api.request({
-        "command" : "ledger",
-        "ledger_index" : "validated",
-        "transactions" : true || false
-    });
-    console.log(response);
-
-}
-
-main();
-```
-
-###  response
-
-the response is a ledger header of a specific ledger version, this ledger version is indexed at 80269545 and it's hash value is `210A9662E43552FC8418829AC513B76D4387A0C6EDFD7A01F2F3369B00D521DB`.  
-key value pairs represented as objects
-
-```JSON
 {
   id: 0,
   result: {
@@ -56,4 +27,4 @@ key value pairs represented as objects
   },
   type: 'response'
 }
-```
+
