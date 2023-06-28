@@ -29,30 +29,53 @@ async function main() {
     
     // creating an instance of the client class using the testnet server
     const client = new xrpl.Client("wss://s.altnet.rippletest.net:51233") 
+
     // connecting to the testnet server
     await client.connect()
 
     // this create a wallet and funds it with the testnet faucet
-    const fund_result = await client.fundWallet()
-    console.log(fund_result.wallet)
-    console.log(fund_result.balance)
+    const morgan = await client.fundWallet()
 
-    // if you only want to generate keys you can create a new wallet instance 
-    const keypairs = xrpl.Wallet.generate()
+    // print wallet object 
+    console.log(morgan.wallet)
 
-    console.log(keypairs)
+    // console.log(`wallet address: ${morgan.wallet.address}`)
+    // this is the balance of the wallet
+    // console.log(`balance: ${morgan.balance}`)
+
+    // this queries the xrpl using the request method to access the xrpl ledgers websocket api
+    const response = await client.request({
+
+        "command": "account_info",
+        "account": morgan.wallet.address,
+        "leger_index": "validated"
+
+    })
+
+    console.log(response)
+
+    /*
+     * you can set up handlers for various types of events in xrpl such as the xrpl ledger's consensus process
+     * which produces a new ledger version
+     *
+     */
+    client.request({
+        "command": "subscribe",
+        "streams": ["ledger"]
+    })
+
+    client.on("ledgerClosed", async (ledger) => {
+        console.log(`ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`)
+    })
+
 
     // disconnect
     client.disconnect()
-    
+
+    return (0); 
 }
 
 main()
-
-
-
-
-
 
 
 
