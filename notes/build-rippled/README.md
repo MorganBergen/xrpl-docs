@@ -18,7 +18,6 @@ mbergen          52318   0.0  0.0 407962000    112 s004  R+    6:08PM   0:00.00 
 
 when you have completed ledgers youre synced to the network
 
-
 ###  systems hardware and software config
 
 ```

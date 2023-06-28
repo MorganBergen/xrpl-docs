@@ -10,7 +10,7 @@ services:
       - "4001:6006"
       - "9001:51235"
     volumes:
-      - ./validator_1/config:/config/
+      - ./validator_1/config/:/etc/opt/ripple/
   validator_2:
     platform: linux/amd64
     container_name: validator_2
@@ -21,7 +21,7 @@ services:
       - "4002:6006"
       - "9002:51235"
     volumes:
-      - ./validator_2/config:/config/
+      - ./validator_2/config/rippled.cfg:/etc/opt/ripple/rippled.cfg
   validator_3:
     platform: linux/amd64
     container_name: validator_3
@@ -32,4 +32,4 @@ services:
       - "4003:6006"
       - "9003:51235"
     volumes:
-      - ./validator_3/config:/config/
+      - ./validator_3/config/rippled.cfg:/etc/opt/ripple/rippled.cfg
