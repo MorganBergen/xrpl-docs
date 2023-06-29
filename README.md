@@ -5,12 +5,7 @@
 -  [x] [build rippled](./src/build-rippled/macos/README.md)
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
 -  [ ] [complete issue #1 palau monitoring](https://github.com/ripple/cbdc-monitoring/issues/1)
-
-Trust lines in the XRP Ledger represent an issuer's obligation to redeem an IOU for an account. In simpler terms, they define the limits at which one account trusts another to owe it money. Trust lines can only be established if the account on the receiving end of the trust line explicitly agrees to it, which is a key feature of the XRP Ledger's trust system.
-
-
--  [ ] [getting started again](https://xrpl.org/get-started-using-javascript.html)
--  [ ][monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
+-  [ ] [monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
 
 - [ ] [fix this error with the config reporting]()
 
@@ -21,12 +16,14 @@ libc++abi: terminating due to uncaught exception of type std::runtime_error: The
 [1]    5614 abort      ./rippled --conf ../cfg/rippled-reporting.cfg
 ```
 
--  [ ] send lauren my github repo
 -  [ ] still need to schedule a meeting with Ross Edwards
+
 -  [ ] [Setup private XRPL network](https://ripplelabs.atlassian.net/wiki/spaces/RIPD/pages/2728100754/Setup+private+XRPL+network)
+
 -  [ ] [resolve error](https://preview.redoc.ly/dcm-docs/xbs-1822-private-ledger/dcm/admin/private-network/quickstart/)
+
 -  [ ] [input license and enter into package.json]()
--  [ ] watch explainer video from mary hall cb-palau(https://ripple.freshservice.com/support/catalog/items/123)
+
 
 ### selected readings
 
@@ -42,6 +39,7 @@ libc++abi: terminating due to uncaught exception of type std::runtime_error: The
      - [ ] cryptographic keys
      - [ ] multi signing
 
+- [x] [getting started again](https://xrpl.org/get-started-using-javascript.html)
 - [ ] [Payment Types](#payment-types)
 - [x] [Tokens](#tokens)
 - [ ] [Decentralized Exchange](#decentralized-exchange)
@@ -60,8 +58,6 @@ libc++abi: terminating due to uncaught exception of type std::runtime_error: The
 - [XRP Overview](#xrp-overview)
 - [xrpl documentation](https://xrpl.org/docs-index.html)
 
-
-
 WebSocket is a protocol that provides full-duplex communication channels over a single TCP connection. This protocol enables interaction between a web browser (or other client applications) and a server with lower overheads, facilitating real-time data transfer from and to the server.
 In the context of rippled, the reference server software that powers the XRP Ledger (XRPL), WebSocket is one of the ways that clients can connect to a rippled server to submit transactions, request information, or subscribe to updates.
 
@@ -77,3 +73,5 @@ You can subscribe to updates from the server: Some commands, like subscribe, set
 
 To close the connection, either the client or the server can send a close frame and terminate the TCP connection.
 Please note, to interact with a rippled server via WebSocket, you need the server's WebSocket URL, which typically looks like "wss://s1.ripple.com:443/". Always be sure to use a secure WebSocket connection (wss://) when dealing with real account information or transactions.
+
+Trust lines in the XRP Ledger represent an issuer's obligation to redeem an IOU for an account. In simpler terms, they define the limits at which one account trusts another to owe it money. Trust lines can only be established if the account on the receiving end of the trust line explicitly agrees to it, which is a key feature of the XRP Ledger's trust system.
