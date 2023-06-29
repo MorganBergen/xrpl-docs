@@ -5,6 +5,10 @@
 -  [x] [build rippled](./src/build-rippled/macos/README.md)
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
 -  [ ] [complete issue #1 palau monitoring](https://github.com/ripple/cbdc-monitoring/issues/1)
+
+Trust lines in the XRP Ledger represent an issuer's obligation to redeem an IOU for an account. In simpler terms, they define the limits at which one account trusts another to owe it money. Trust lines can only be established if the account on the receiving end of the trust line explicitly agrees to it, which is a key feature of the XRP Ledger's trust system.
+
+
 -  [ ] [getting started again](https://xrpl.org/get-started-using-javascript.html)
 -  [ ][monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
 
