@@ -41,16 +41,65 @@ async function main() {
      *
      */
 
-    // Get info from the ledger about the address we just funded
+
+    // get info from the ledger about the address we just funded
     const response = await client.request({
+        /*  command of type string is the name of the api method
+         *  the api method communicates directly with an xrp ledger server 
+         *  using the public api methods.  public api methods are not necessarily 
+         *  meant for the general public, but they are used by any client attached to the server
+         *  think of public methods as being for memebers or customers of the organization running the server
+         */
         "command": "account_info",
         "account": morgan_wallet.address,
         "ledger_index": "validated"
     })
 
+    // listen to ledger close events
+    client.request({
+        "command": "subscribe",
+        "streams": ["ledger"]
+    })
+
+    client.on("ledgerClosed", async (ledger) => {
+        console.log(`Ledger #${ledger.ledger_index} validated with ${ledger.txn_count} transactions!`)
+    })
+
+    let counter = 0;
+
+    const intervalID = setInterval(() => {
+        console.log(`program has been running for ${counter} seconds`)
+    }, 1000);
     
+    setTimeout(() => {
+        client.disconnect()
+    }, 100000)
+
 
     client.disconnect()
+
+    clearInterval(intervalID)
 }
 
 main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,16 @@
+/*
+ * @author  morgan bergen
+ * @date    thu jun 29
+ * @name    main.js
+ * @brief   listen for events with the subscribe method
+ */
+
+const xrpl = require('xrpl')
+async function main() {
+    const client = new xrpl.client("wss://xrplcuster.com")
+
+    await client.connect()
+
+
+    client.disconnect()
+}
