@@ -339,10 +339,6 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 -----------------------------------------------------------
 
 
-
-
-
-
 -----------------------------------------------------------
 ##  reset conan package setup
 
@@ -371,8 +367,6 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}
 2.  `mkdir .build`
 3.  `cd .build`
 3.  `conan install --build boost .`
-
-
 4.  `conan install .. --output-folder . --build missing --settings build_type=Release` 
 
 ```

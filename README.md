@@ -5,6 +5,18 @@
 -  [x] [build rippled](./src/build-rippled/macos/README.md)
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
 -  [ ] [complete issue #1 palau monitoring](https://github.com/ripple/cbdc-monitoring/issues/1)
+-  [ ] [getting started again](https://xrpl.org/get-started-using-javascript.html)
+-  [ ][monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
+
+- [ ] [fix this error with the config reporting]()
+
+```
+❯ ./rippled --conf ../cfg/rippled-reporting.cfg
+Loading: "../cfg/rippled-reporting.cfg"
+libc++abi: terminating due to uncaught exception of type std::runtime_error: The file specified in [validators_file] does not exist: /opt/rippled-reporting/etc/validators.txt
+[1]    5614 abort      ./rippled --conf ../cfg/rippled-reporting.cfg
+```
+
 -  [ ] send lauren my github repo
 -  [ ] still need to schedule a meeting with Ross Edwards
 -  [ ] [Setup private XRPL network](https://ripplelabs.atlassian.net/wiki/spaces/RIPD/pages/2728100754/Setup+private+XRPL+network)
@@ -48,11 +60,16 @@
 
 WebSocket is a protocol that provides full-duplex communication channels over a single TCP connection. This protocol enables interaction between a web browser (or other client applications) and a server with lower overheads, facilitating real-time data transfer from and to the server.
 In the context of rippled, the reference server software that powers the XRP Ledger (XRPL), WebSocket is one of the ways that clients can connect to a rippled server to submit transactions, request information, or subscribe to updates.
+
 When you interact with a rippled server via WebSocket:
+
 You establish a WebSocket connection: This is typically done using a WebSocket client, which could be a library in a programming language like JavaScript, Python, or Java, or even directly in a web browser that supports the WebSocket protocol.
+
 You send requests through the WebSocket connection: These requests are usually in the form of JSON-formatted command messages. Each different command you send corresponds to a different type of request you're making to the rippled server. For example, the wallet_propose command generates a new key pair and XRP Ledger address.
+
 You receive responses from the server: After you send a command, the server processes your request and sends back a response. This response includes any data you requested, along with information about whether the request was successful or why it failed. For instance, in response to a wallet_propose command, you'd receive information about the newly generated address.
+
 You can subscribe to updates from the server: Some commands, like subscribe, set up ongoing communication from the server to your client. For example, you could subscribe to all transactions affecting a particular account, and the server would send your client a message every time a new transaction affecting that account is validated.
+
 To close the connection, either the client or the server can send a close frame and terminate the TCP connection.
 Please note, to interact with a rippled server via WebSocket, you need the server's WebSocket URL, which typically looks like "wss://s1.ripple.com:443/". Always be sure to use a secure WebSocket connection (wss://) when dealing with real account information or transactions.
-
