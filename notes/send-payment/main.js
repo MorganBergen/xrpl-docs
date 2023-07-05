@@ -20,33 +20,40 @@ async function main() {
     await client.connect()
 
     // this create a wallet and funds it with the testnet faucet
-    const morgan = await client.fundWallet()
+    const morgan_wallet = await client.fundWallet()
     
-    console.log(morgan)
+    console.log(morgan_wallet) 
 
     // this queries the xrpl using the request method to access the xrpl ledgers websocket api
     const response = await client.request({
         "command": "account_info",
-        "account": morgan.wallet.address,
+        "account": morgan_wallet.wallet.address,
         "leger_index": "validated"
     })
 
-    console.log(response)
+    // console.log(response)
+
+
+    // this creates an unsigned transaction
+    const unsigned_transaction = await client.prepareTransaction({
+        "TransactionType": "Payment",
+        "Account": morgan_wallet.wallet.address,
+        "Amount": xrpl.xrpToDrops("20"),
+        "Destination": "rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe"
+    })
+
+
+    // this signs the transaction
+    const signed = morgan_wallet.wallet.sign(unsigned_transaction)
+    const tx = await client.submitAndWait(signed.tx_blob)
+
 
     /*
-     * you can set up handlers for various types of events in xrpl such as the xrpl ledger's consensus process
-     * which produces a new ledger version
-     *
+     * check the transaction results
      */
-    client.request({
-        "command": "subscribe",
-        "streams": ["ledger"]
-    })
 
-    client.on("ledgerClosed", async (ledger) => {
-        console.log(`ledger #${ledger.ledger_index} 
-            validated with ${ledger.txn_count} transactions!`)
-    })
+    console.log(tx.result.meta.TransactionResult)
+    console.log(tx)
 
 
     // disconnect

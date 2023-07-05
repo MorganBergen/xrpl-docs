@@ -1,11 +1,13 @@
-#  intern guide
+#  intern guide 
 
 ###  to do list
 
 -  [x] [build rippled](./src/build-rippled/macos/README.md)
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
 -  [x] [complete issue #1 palau monitoring](https://github.com/ripple/wwbdc-monitoring/issues/1)
+-  [ ] [dev containers](https://www.youtube.com/watch?v=SDa3v4Quj7Y)
 -  [x] [Payment System Basics](#payment-system-basics)
+-  [ ] [trust lines and issuing](https://xrpl.org/trust-lines-and-issuing.html)
 -  [ ] [monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
 -  [ ] [fix this error with the config reporting]()
 -  [ ] consensus
