@@ -250,7 +250,6 @@ async function account_info() {
 async function main() {
 
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
-
     const { wallet } = await create_account();
 
     const p_limit = '100';
@@ -259,9 +258,55 @@ async function main() {
     const p_flags = TrustSetFlags.tfSetfAuth | TrustSetFlags.tfSetFreeze;
 
     await set_require_auth(p_client, wallet);
+
     create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+
 
     return(0);
 }
 
 main();
+
+/**
+ * TESTING GROUND
+ */
+
+async function issuer_set() {
+    const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
+    const { wallet } = await create_account();
+    const issuer = wallet;
+    await set_require_auth(p_client, issuer);
+
+}
+
+async function user_set() {
+    const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
+    const { wallet } = await create_account();
+    const user = wallet;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
