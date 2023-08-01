@@ -44,13 +44,12 @@ if an account != a psc_account
 then provide console log alert regarding transaction
 
 
-```
-// serverInfo.ts
+###  view settings of a trustline 
 
-for (each account_lines.result.lines[].account) {
-    if account.lines.result.lines[i] is not in psc_accounts alert
-}
-```
+1.  trust line settings
+-  the trust line settings are specific to each account on the trust line and are stored as part of the trust line's metadata
+-  to view the trustline settinsg, you can use the `account_lines` method in the ripple api
+-  the 
 
 
 

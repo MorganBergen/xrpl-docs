@@ -16,7 +16,6 @@
 
 import { Client } from "xrpl";
 
-
 async function trustline_alert_hard() {
     
     const authorized_trustlines = [
@@ -65,6 +64,7 @@ async function trustline_alert_hard() {
             account: "rngdKd8BAM3etQcb12DvGxd5Ps9MocAvPa",
             //marker?: unknown
         });
+        
         console.log(issuer_lines_res);
         
         var customer_addresses_list = [];

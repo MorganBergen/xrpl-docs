@@ -14,6 +14,8 @@
  * @function                    create_trustline
  * @function                    account_info
  *
+ * https://dcm.ripplesandbox.com/wallet/rDZkpBiYiDJtbAQz3c1WEBmip6c23AVAZT
+ *
  */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -95,7 +97,7 @@ function main() {
  *
  * @description                 The function creates a new client connected to the XRP TestNet, creates a new wallet, funds it and disconnects the client.
  *                              It then retrieves the account info related to the wallet and prints it.
- *                              It finally returns the wallet object.
+ *                              It finally returns the wallet objec.
  */
 function create_account() {
     return __awaiter(this, void 0, void 0, function () {
@@ -103,7 +105,7 @@ function create_account() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    client = new xrpl_1.Client('wss://s.altnet.rippletest.net:51233/');
+                    client = new xrpl_1.Client('wss://s.altnet.rippletest.net:51233/', {});
                     return [4 /*yield*/, client.connect()];
                 case 1:
                     _a.sent();

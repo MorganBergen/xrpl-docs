@@ -163,7 +163,7 @@ the command that launches your `rippled` container and the rippled websocket at 
 ❯ docker run -dit --platform linux/amd64 \
     --name rippled \
     -p 80:80 \
-    -v /Users/mbergen/Documents/Github/docker-rippled/config/:/config/ \
+    -v /users/mbergen/documents/github/docker-rippled/config/:/config/ \
     xrpllabsofficial/xrpld:latest
 c2e5d8654a143661bd2b6d351e2f2e98cc09a9c0875c19549e53f31242ee68fb
 ```

@@ -1,6 +1,5 @@
 # trustlines
 
-
 ```
 const authorized_trustlines = [
     "PSC.rwekfW4MiS5yZjXASRBDzzPPWYKuHvKP7E"
@@ -135,4 +134,145 @@ function main() {
 
 main();
 
+```
+
+
+We are going to try to create an account to an issuer requiring an AuthTrustline and then freeze the account.
+
+##  to do
+
+
+```
+constructor(parameters: AnyJson, schedule: string, timezone: string) {
+    // Validate parameters
+    if (!parameters || typeof parameters !== 'object') {
+        throw new Error('Invalid parameters. Expected an object.');
+    }
+    if (typeof schedule !== 'string' || schedule.trim() === '') {
+        throw new Error('Invalid schedule. Expected a non-empty string.');
+    }
+    // Additional validation for timezone if necessary
+
+    this.schedule = schedule;
+    this.timezone = timezone;
+    this.parameters = parameters;
+}
+```
+
+
+
+
+```typescript
+/**
+ * Represents a CBDC (Central Bank Digital Currency) alert.
+ * @implements {CBDCAlert}
+ * @author Morgan Bergen <mbergen@ripple.com>
+ This module provides the implementation for the CBDCALERT001 alert.
+ *              The alert triggers when unauthorized trust lines are found for specified accounts.
+ *              It utilizes the XRPL API to check account balances and validate trust lines.
+ */
+ /**
+ * Represents a CBDC (Central Bank Digital Currency) alert.
+ * @module CBDCALERT001
+ * @implements {CBDCAlert}
+ * @description This module provides the CBDCALERT001 class that implements the CBDCAlert interface.
+ *              The class represents a CBDC alert and provides functionality to start the alert,
+ *              trigger the alert for specified accounts, and execute the alert's logic.
+ *              The alert checks for unauthorized trust lines using the XRPL API.
+ * @author Morgan Bergen <mbergen@ripple.com>
+ */
+
+import { AnyJson } from "../../types";
+import { log } from "../../utils/log";
+import { createJob } from "../job";
+import { CBDCAlert } from "../../interfaces";
+import { getAccountBalances } from "../xrpl";
+
+export default class CBDCALERT001 implements CBDCAlert {
+
+    /**
+     * The parameters for the CBDC alert.
+     * @type {AnyJson}
+     */
+    parameters!: AnyJson;
+
+    /**
+     * The schedule for the CBDC alert.
+     * @type {string}
+     */
+    schedule: string = "";
+
+    /**
+     * The timezone for the CBDC alert.
+     * TODO: Consider changing to an enum type.
+     * @type {string}
+     */
+    timezone: string = "";
+
+    /**
+     * The code identifier for the CBDC alert.
+     * @type {string}
+     */
+    alertCode: string = "CBDCALERT001";
+
+    /**
+     * Constructs a new CBDCALERT001 instance.
+     * @param {AnyJson} parameters - The parameters for the CBDC alert.
+     * @param {string} schedule - The schedule for the CBDC alert.
+     * @param {string} timezone - The timezone for the CBDC alert.
+     */
+    constructor(parameters: AnyJson, schedule: string, timezone: string) {
+        // TODO: Validate parameters
+        this.schedule = schedule;
+        this.timezone = timezone;
+        this.parameters = parameters;
+    }
+
+    /**
+     * Starts the CBDC alert.
+     */
+    async start() {
+        log.debug(`Executing alert start (${this.schedule})`);
+        try {
+            const job = createJob(this.schedule, this.implementation, this.timezone);
+            log.debug(`Job created for ${this.alertCode}: ${job}`);
+        } catch (e) {
+            log.error(e);
+        }
+    }
+
+    /**
+     * Triggers the CBDC alert for the specified account.
+     * @param {string} account - The account to trigger the alert for.
+     */
+    async triggerAlert(account: string) {
+        try {
+            const balances = await getAccountBalances(account);
+            for (let x = 0; x < balances.length; x++) {
+                const trustline = `${balances[x].currency}.${balances[x].account}`;
+                if (this.parameters.allowed_trustlines.indexOf(trustline) < 0)
+                    log.warn(`${this.alertCode}: Trustline ${trustline} for ${account} is not allowed`);
+            }
+        } catch (e) {
+            log.error(`Error checking trust lines for ${account}: ${(e as Error).message}`);
+        }
+    }
+
+    /**
+     * The implementation function for the CBDC alert.
+     */
+    implementation = async () => {
+        try {
+            log.debug(`Executing alert ${this.alertCode} logic: ${JSON.stringify(this.parameters.accounts)}`);
+            const checks = (this.parameters.accounts.map((account: string) => {
+                return this.triggerAlert(account);
+            }));
+            Promise.all(checks);
+        } catch (error) {
+            log.error(`Error checking alert ${this.alertCode}: ${error}`);
+        } finally {
+            log.debug(`Alert ${this.alertCode} executed.`);
+        }
+    }
+}
 ```

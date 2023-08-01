@@ -13,6 +13,8 @@
  * @function                    create_trustline
  * @function                    account_info
  *
+ * https://dcm.ripplesandbox.com/wallet/rDZkpBiYiDJtbAQz3c1WEBmip6c23AVAZT
+ *
  */
 
 import { Client, Wallet, TrustSet, AccountSet, TrustSetFlags, AccountSetAsfFlags } from "xrpl"
@@ -51,11 +53,14 @@ async function main() {
  *
  * @description                 The function creates a new client connected to the XRP TestNet, creates a new wallet, funds it and disconnects the client. 
  *                              It then retrieves the account info related to the wallet and prints it. 
- *                              It finally returns the wallet object.
+ *                              It finally returns the wallet objec.
  */
 async function create_account() {
-    
-    const client = new Client ('wss://s.altnet.rippletest.net:51233/');
+   
+    // const FAUCET_URL = 'wss://s.altnet.rippletest.net:51233/';
+    const client = new Client ('wss://s.altnet.rippletest.net:51233/', {
+        
+    });
     await client.connect();
     const wallet = await client.fundWallet();
 
@@ -78,6 +83,8 @@ async function create_account() {
     client.disconnect();
     return (wallet);
 }
+
+
 
 /**
  * @function                set_require_auth
@@ -270,9 +277,6 @@ async function account_info() {
 
 main();
 
-/**
- * TESTING GROUND
- */
 async function issuer_set() {
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
     const { wallet } = await create_account();
@@ -289,4 +293,3 @@ async function requester_set() {
     return (wallet);
 }
 
-wss://s1.cbdc-sandbox.rippletest.net:51233
