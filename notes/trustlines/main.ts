@@ -18,6 +18,33 @@
 import { Client, Wallet, TrustSet, AccountSet, TrustSetFlags, AccountSetAsfFlags } from "xrpl"
 
 /**
+ * @function                    main
+ * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement, 
+ *                              and creation of a trustline to an issuer on the testnet
+ * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
+ * 
+ * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
+ *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution. 
+ *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
+ */
+async function main() {
+
+    const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
+    const { wallet } = await create_account();
+
+    const p_limit = '100';
+    const p_currency = 'PSC';
+    const p_issuer = await account_info();
+    const p_flags = TrustSetFlags.tfSetfAuth | TrustSetFlags.tfSetFreeze;
+
+    await set_require_auth(p_client, wallet);
+
+    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+
+    return(0);
+}
+
+/**
  * @function                    create_account
  * @summary                     Connects to the XRP TestNet, creates a new wallet and funds it. Prints out wallet info and account info to the console.
  * @returns {Promise<Wallet>}   The wallet that has been created and funded.
@@ -73,8 +100,11 @@ async function set_require_auth(client: Client, wallet: Wallet) {
         TransactionType: "AccountSet",
         Account: wallet.classicAddress,
         SetFlag: AccountSetAsfFlags.asfRequireAuth,
+        //SetFlag: AccountSetAsfFlags.asfDisallowIncomingTrustline,
         ClearFlag: 0 
     };
+
+    console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
 
     const tx_prepared = await client.autofill(account_set);
 
@@ -237,76 +267,26 @@ async function account_info() {
     }
 }
 
-/**
- * @function                    main
- * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement, 
- *                              and creation of a trustline to an issuer on the testnet
- * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
- * 
- * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
- *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution. 
- *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
- */
-async function main() {
-
-    const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
-    const { wallet } = await create_account();
-
-    const p_limit = '100';
-    const p_currency = 'PSC';
-    const p_issuer = await account_info();
-    const p_flags = TrustSetFlags.tfSetfAuth | TrustSetFlags.tfSetFreeze;
-
-    await set_require_auth(p_client, wallet);
-
-    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
-
-
-    return(0);
-}
 
 main();
 
 /**
  * TESTING GROUND
  */
-
 async function issuer_set() {
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
     const { wallet } = await create_account();
     const issuer = wallet;
     await set_require_auth(p_client, issuer);
-
+    return (wallet);
 }
 
-async function user_set() {
+async function requester_set() {
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
     const { wallet } = await create_account();
-    const user = wallet;
-
+    const requester = wallet;
+    await set_require_auth(p_client, requester);
+    return (wallet);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+wss://s1.cbdc-sandbox.rippletest.net:51233

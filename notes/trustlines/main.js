@@ -54,6 +54,41 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var xrpl_1 = require("xrpl");
 /**
+ * @function                    main
+ * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement,
+ *                              and creation of a trustline to an issuer on the testnet
+ * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
+ *
+ * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
+ *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution.
+ *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
+ */
+function main() {
+    return __awaiter(this, void 0, void 0, function () {
+        var p_client, wallet, p_limit, p_currency, p_issuer, p_flags;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    p_client = new xrpl_1.Client('wss://s.altnet.rippletest.net:51233/');
+                    return [4 /*yield*/, create_account()];
+                case 1:
+                    wallet = (_a.sent()).wallet;
+                    p_limit = '100';
+                    p_currency = 'PSC';
+                    return [4 /*yield*/, account_info()];
+                case 2:
+                    p_issuer = _a.sent();
+                    p_flags = xrpl_1.TrustSetFlags.tfSetfAuth | xrpl_1.TrustSetFlags.tfSetFreeze;
+                    return [4 /*yield*/, set_require_auth(p_client, wallet)];
+                case 3:
+                    _a.sent();
+                    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+                    return [2 /*return*/, (0)];
+            }
+        });
+    });
+}
+/**
  * @function                    create_account
  * @summary                     Connects to the XRP TestNet, creates a new wallet and funds it. Prints out wallet info and account info to the console.
  * @returns {Promise<Wallet>}   The wallet that has been created and funded.
@@ -121,8 +156,10 @@ function set_require_auth(client, wallet) {
                         TransactionType: "AccountSet",
                         Account: wallet.classicAddress,
                         SetFlag: xrpl_1.AccountSetAsfFlags.asfRequireAuth,
+                        //SetFlag: AccountSetAsfFlags.asfDisallowIncomingTrustline,
                         ClearFlag: 0
                     };
+                    console.log(typeof xrpl_1.AccountSetAsfFlags.asfDisallowIncomingTrustline);
                     return [4 /*yield*/, client.autofill(account_set)];
                 case 2:
                     tx_prepared = _a.sent();
@@ -295,19 +332,13 @@ function account_info() {
         });
     });
 }
+main();
 /**
- * @function                    main
- * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement,
- *                              and creation of a trustline to an issuer on the testnet
- * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
- *
- * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
- *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution.
- *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
+ * TESTING GROUND
  */
-function main() {
+function issuer_set() {
     return __awaiter(this, void 0, void 0, function () {
-        var p_client, wallet, p_limit, p_currency, p_issuer, p_flags;
+        var p_client, wallet, issuer;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -315,19 +346,31 @@ function main() {
                     return [4 /*yield*/, create_account()];
                 case 1:
                     wallet = (_a.sent()).wallet;
-                    p_limit = '100';
-                    p_currency = 'PSC';
-                    return [4 /*yield*/, account_info()];
+                    issuer = wallet;
+                    return [4 /*yield*/, set_require_auth(p_client, issuer)];
                 case 2:
-                    p_issuer = _a.sent();
-                    p_flags = xrpl_1.TrustSetFlags.tfSetfAuth | xrpl_1.TrustSetFlags.tfSetFreeze;
-                    return [4 /*yield*/, set_require_auth(p_client, wallet)];
-                case 3:
                     _a.sent();
-                    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
-                    return [2 /*return*/, (0)];
+                    return [2 /*return*/, (wallet)];
             }
         });
     });
 }
-main();
+function requester_set() {
+    return __awaiter(this, void 0, void 0, function () {
+        var p_client, wallet, requester;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    p_client = new xrpl_1.Client('wss://s.altnet.rippletest.net:51233/');
+                    return [4 /*yield*/, create_account()];
+                case 1:
+                    wallet = (_a.sent()).wallet;
+                    requester = wallet;
+                    return [4 /*yield*/, set_require_auth(p_client, requester)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/, (wallet)];
+            }
+        });
+    });
+}
