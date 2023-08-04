@@ -1,0 +1,23 @@
+{
+   "key_type" : "ed25519",
+   "public_key" : "nHUhGHSwu1cEAiTgLRZTUrUBPjRcimVM9hemGZ8zA6hXz2U1SKB7",
+   "revoked" : false,
+   "secret_key" : "pfhT4QojrAmsj8GCDE7rPcujzjAKvCJuYgBVkS4mFyX33KDLF1M",
+   "token_sequence" : 0
+}
+
+root@6ef47acadae0:/opt/ripple/bin# ./validator-keys create_token --keyfile /Users/validator-keys.json
+Update rippled.cfg file with these values and restart rippled:
+
+# validator public key: nHUhGHSwu1cEAiTgLRZTUrUBPjRcimVM9hemGZ8zA6hXz2U1SKB7
+
+[validator_token]
+eyJtYW5pZmVzdCI6IkpBQUFBQUZ4SWUxY3M4ZkpYd2FnQ0tFQmRVWEp2WWlGWVZDMTR3WE93
+TFBERDhBbG9mSzBHbk1oQXlhbTY0bTg5NUdOcUszU24yaVdYTzRSOHRRR2dOd1dwNGJFNnpn
+M2l2RGJka2N3UlFJaEFJclYzOUJHWXJiZ09qOFdIcTF6YmpISHRkbTU3OXpqR0NRN1BjQSt2
+czdtQWlBSTR6T1lCaHBaOU1aZWlyVzhTUisxSWt6TmZmMGhtZzFPVGxwaldpK2Q2bkFTUU9J
+UXFLYlZBYXRTSUx1cXpGUGNENHBOK1QyRXRTVXBlSWxVWGFobEJIQ1RVV3BQbGJpNkFaRkVk
+Mmh4NmIzS2V3MGhlWGF2eGNRN0xGMzZGZXFkTGdRPSIsInZhbGlkYXRpb25fc2VjcmV0X2tl
+eSI6Ijg0RDNBREUxMzI3NjM0NDIzMkY4MTgzQkM2NjEzMDY0MTcyQUU0QzgyMEYxRTFFRUZC
+QjUxMjg0RjhDNkYxQTQifQ==
+
