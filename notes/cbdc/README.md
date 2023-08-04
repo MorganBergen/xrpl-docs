@@ -44,66 +44,49 @@ if an account != a psc_account
 then provide console log alert regarding transaction
 
 
-###  view settings of a trustline 
-
-1.  trust line settings
--  the trust line settings are specific to each account on the trust line and are stored as part of the trust line's metadata
--  to view the trustline settinsg, you can use the `account_lines` method in the ripple api
--  the 
 
 
 
+Sequelize CLI [Node: 20.2.0, CLI: 6.6.1, ORM: 6.32.1]
 
+Loaded configuration file "src/db/config/config.js".
+Using environment "development".
+== 20230623152716-dev: migrating =======
+{
+  "tenant1": {
+    "tenant_id": "7a614d2f-b21b-4bfb-bec5-74405041dfb2",
+    "tenant_name": "Oceana",
+    "tenant_ws_endpoint": "wss://s1.ripple.com",
+    "tenant_process_endpoint": "http://localhost:4001",
+    "tenant_active": true
+  },
+  "tenant2": {
+    "tenant_id": "0a0178d3-e3b0-4f89-b2d0-7f48cb475188",
+    "tenant_name": "Althea",
+    "tenant_ws_endpoint": "wss://s1.cbdc-sandbox.rippletest.net:51233",
+    "tenant_process_endpoint": "http://localhost:4002",
+    "tenant_active": false
+  },
+  "tenant3": {
+    "tenant_id": "6121e2cd-973c-4957-aac0-ff538a695082",
+    "tenant_name": "London",
+    "tenant_ws_endpoint": "wss://s1.cbdc-sandbox.rippletest.net:51233",
+    "tenant_process_endpoint": "http://localhost:4003",
+    "tenant_active": true
+  },
+  "tenant4": {
+    "tenant_id": "0d1e373c-5595-4eed-b115-28e7dc97f363",
+    "tenant_name": "Rai",
+    "tenant_ws_endpoint": "wss://s1.cbdc-sandbox.rippletest.net:51233",
+    "tenant_process_endpoint": "http://localhost:4001",
+    "tenant_active": true
+  }
+}
+== 20230623152716-dev: migrated (0.087s)
 
+Done. Press any key to close the terminal.
 
+###  cbdc wallet
 
-
-
-
-</details>
-
-<details><summary>2.  subscribe to all <code>pilot_accounts</code> & <code>test_accounts</code></summary></details>
-
-<details><summary>3.  subscribe to all <code>retail_accounts</code></summary></details>
-
-<details><summary>4.  subscribe to all <code>internal_accounts</code></summary></details>
-
-<details><summary>5.  subscribe to <code>issuer_account</code></summary>
--  any trustline from an unknown account
-    -  alert
-    -  pseudocode
--  any transaction outside workflow
-    -  alert
-    -  allowed trxs
-        -  payment
-            -  currency - <code>issuer_account</code>
-        -  TrustSet
-            -  <code>tfSetFreeze</code>
-            -  <code>tfClearFreeze</code>
-        -  SingerListSet
-            -  <code>SingerQuorum</code>
-            -  <code>SignerEntries</code>
-        - pseudocode
-</details>
-
-<details><summary>6.  call free endpoint</summary>
--  fees higher than 10 drops
-    -  alert
-    -  pseudocode
-</details>
-
-
-###  questions to address 
-
-call account_lines api for issuer_account
-any trustline not known to pilot alert
-alert message must include psc balance and need to freeze
-
-1.  what does he mean by call an api?
-
-declare preprocessor directive of library `xrpl`
-
-
-
-
-
+universal payment identifier morganbergen$dev.cbdc.xpring.money
+seed ssPNH2tK2qayLKBL3M47ZAgRgcsDH

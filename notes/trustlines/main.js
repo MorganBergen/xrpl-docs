@@ -335,9 +335,6 @@ function account_info() {
     });
 }
 main();
-/**
- * TESTING GROUND
- */
 function issuer_set() {
     return __awaiter(this, void 0, void 0, function () {
         var p_client, wallet, issuer;
