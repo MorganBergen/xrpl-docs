@@ -1,4 +1,0 @@
-[validators]
-    nHUFWnkwNxBh7w2GQyyBhkmCVYHv67mG6wGqWkEF4rPF8eaF9GL2
-    nHBRECMGtvMBESxgVJQdE33Jj5bCSYx8SwMZbPP3tXZvB278Pdb2
-    nHBxnoaquN8EcgyCwEnKLNZ78yNT2TvszKQy1FoxZXNUAZKmznMb
