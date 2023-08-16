@@ -15,5 +15,3 @@
 3.  get an account
 4.  query the xrp ledger
 5.  listen for events
-
-
