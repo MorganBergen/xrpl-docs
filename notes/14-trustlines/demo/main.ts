@@ -4,8 +4,6 @@
  * @overview
  * @tutorial                    main.ts in the terminal call tsc main.ts, then call node main.js, and the console output will be returned
  * @overview                    This module implement account creation on the testnet using websockets
- *                              Sets the account authorization requirement with SetFlag: AccountSetAsfFlags.asfRequireAuth
- *                              Initializes a trustline to the issuer "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59"
  *
  * @todo                        Implement a function analagous to set_require_auth to freeze the newly created account 
  * @function                    create_account 
@@ -13,7 +11,6 @@
  * @function                    create_trustline
  * @function                    account_info
  *
- * https://dcm.ripplesandbox.com/wallet/rDZkpBiYiDJtbAQz3c1WEBmip6c23AVAZT
  *
  */
 
@@ -31,7 +28,7 @@ async function main() {
 
     await set_require_auth(p_client, wallet);
 
-    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+    create_trustline(p_client, wallet, p_limit, p_currency, '', p_flags);
 
     return(0);
 }

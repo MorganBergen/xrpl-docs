@@ -1,34 +1,5 @@
-/**
- * @author                      Morgan Bergen <mbergen@ripple.com>
- * @file                        main.ts
- * @overview
- * @tutorial                    main.ts in the terminal call tsc main.ts, then call node main.js, and the console output will be returned
- * @overview                    This module implement account creation on the testnet using websockets
- *                              Sets the account authorization requirement with SetFlag: AccountSetAsfFlags.asfRequireAuth
- *                              Initializes a trustline to the issuer "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59"
- *
- * @todo                        Implement a function analagous to set_require_auth to freeze the newly created account 
- * @function                    create_account 
- * @function                    set_require_auth 
- * @function                    create_trustline
- * @function                    account_info
- *
- * https://dcm.ripplesandbox.com/wallet/rDZkpBiYiDJtbAQz3c1WEBmip6c23AVAZT
- *
- */
-
 import { Client, Wallet, TrustSet, AccountSet, TrustSetFlags, AccountSetAsfFlags } from "xrpl"
 
-/**
- * @function                    main
- * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement, 
- *                              and creation of a trustline to an issuer on the testnet
- * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
- * 
- * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
- *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution. 
- *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
- */
 async function main() {
 
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
@@ -46,15 +17,6 @@ async function main() {
     return(0);
 }
 
-/**
- * @function                    create_account
- * @summary                     Connects to the XRP TestNet, creates a new wallet and funds it. Prints out wallet info and account info to the console.
- * @returns {Promise<Wallet>}   The wallet that has been created and funded.
- *
- * @description                 The function creates a new client connected to the XRP TestNet, creates a new wallet, funds it and disconnects the client. 
- *                              It then retrieves the account info related to the wallet and prints it. 
- *                              It finally returns the wallet objec.
- */
 async function create_account() {
    
     // const FAUCET_URL = 'wss://s.altnet.rippletest.net:51233/';
@@ -85,20 +47,6 @@ async function create_account() {
 }
 
 
-
-/**
- * @function                set_require_auth
- * @summary                 An asynchronous function that sets the requireAuth flag for an XRPL account.
- * @param {Client}          client The Client object to interact with the XRPL.
- * @param {Wallet}          wallet The Wallet object containing the account details.
- * @returns {Promise<void>} A promise that resolves when the requireAuth flag has been set.
- *
- * @description             This function connects to the XRPL, prepares and signs a transaction to set the requireAuth flag for the account, 
- *                          and submits the transaction. 
- *                          If the transaction is not successful, an error message is printed to the console and 1 is returned indicated failure.
- *                          If it is successful, the function waits for a certain period of time before retrieving and printing the transaction details. 
- *                          It then retrieves and prints the updated account information and finally disconnects from the testnet.
- */
 async function set_require_auth(client: Client, wallet: Wallet) {
     
     await client.connect();
@@ -106,16 +54,22 @@ async function set_require_auth(client: Client, wallet: Wallet) {
     const account_set: AccountSet = {
         TransactionType: "AccountSet",
         Account: wallet.classicAddress,
-        SetFlag: AccountSetAsfFlags.asfRequireAuth,
+
+        //SetFlag: AccountSetAsfFlags.asfRequireAuth,
         //SetFlag: AccountSetAsfFlags.asfDisallowIncomingTrustline,
-        ClearFlag: 0 
+        //ClearFlag: 0 
     };
 
-    console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
+    //console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
+    console.log(`${typeof} ${account_set}`);
 
     const tx_prepared = await client.autofill(account_set);
 
+    client.disconnect();
+
     const tx_signed = wallet.sign(tx_prepared);
+
+    await client.connect();
 
     const tx_result = await client.submit(tx_signed.tx_blob);
 
