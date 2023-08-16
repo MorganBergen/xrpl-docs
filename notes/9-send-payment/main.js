@@ -39,7 +39,7 @@ async function main() {
         "TransactionType": "Payment",
         "Account": morgan_wallet.wallet.address,
         "Amount": xrpl.xrpToDrops("20"),
-        "Destination": "rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe"
+        "Destination": ""
     })
 
 
