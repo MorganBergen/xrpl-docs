@@ -12,7 +12,7 @@ async function main() {
 
     await set_require_auth(p_client, wallet);
 
-    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+    create_trustline(p_client, wallet, p_limit, p_currency, '', p_flags);
 
     return(0);
 }
@@ -193,7 +193,7 @@ async function create_trustline(client: Client, wallet: Wallet, limit: string, c
  * @returns {Promise<string>}   A promise that resolves with the account's address as a string.
  * 
  * @description                 This function connects to the testnet, sends a request to retrieve the account information of a 
- *                              issuer account (r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59), and logs the response to the console. 
+ *                              issuer account (), and logs the response to the console. 
  *                              Finally disconnects the client and returns the account's address as a string. 
  *                              If there is an error during this process, the error is catched and console logged.
  */
@@ -206,7 +206,7 @@ async function account_info() {
         const message = await client.request({
             "id": 2,
             "command": "account_info",
-            "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59",
+            "account": "",
             "strict": true,
             "ledger_index": "validated",
             "api_version": 1

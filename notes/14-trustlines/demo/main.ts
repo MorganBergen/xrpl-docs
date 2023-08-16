@@ -22,8 +22,7 @@ async function main() {
     const { wallet } = await create_account();
 
     const p_limit = '100';
-    const p_currency = 'PSC';
-    const p_issuer = await account_info();
+    const p_currency = 'XXX';
     const p_flags = TrustSetFlags.tfSetfAuth | TrustSetFlags.tfSetFreeze;
 
     await set_require_auth(p_client, wallet);
@@ -197,7 +196,7 @@ async function account_info() {
         const message = await client.request({
             "id": 2,
             "command": "account_info",
-            "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59",
+            "account": "",
             "strict": true,
             "ledger_index": "validated",
             "api_version": 1
