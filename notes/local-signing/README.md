@@ -28,4 +28,8 @@ A reference for offline account set up tutorial and implementation instructions,
 
 ###  definition
 
+offline transaction signing is a method of signing transactions without exposing the private spend key to a computer that is connected to the internet.  conceptually, this is similar to how a hardware wallet functions, except the process is done manually.
+
 ###  example 
+
+
