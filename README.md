@@ -14,45 +14,6 @@
 -  [ ] make a do a transaction
 
 ```
-❯ grep -r "TODO" .
-./test/main/CBDCALERT002.test.ts:    //TODO test actual fucntion called by the alert
-./enums/index.ts:    // TODO: ...
-./utils/misc.ts:        if (paramType === "LIST") result[param.parameter_name] = new Array(); // TODO LIST ENUM
-./index.ts:                            log.warn(`TODO: ignoring ${alertCode} alerts for now (Not implemented)`);
-./index.ts:        startServer(3003); //TODO: port
-./services/alerts/CBDCALERT002.ts:    timezone: string = ""; // TODO: Enum
-./services/alerts/CBDCALERT002.ts:        // TODO: validate parameters
-./services/alerts/CBDCALERT003.ts: * TODO include rasing an actual alert that is send out.
-./services/alerts/CBDCALERT003.ts:        // TODO: validate parameters
-./services/alerts/CBDCALERT003.ts:                // TODO: Cast to its own type
-./services/alerts/CBDCALERT004.ts:        // TODO: validate parameters
-./services/alerts/CBDCALERT005.ts:    timezone: string = ""; // TODO: Enum
-./services/alerts/CBDCALERT005.ts:        // TODO: validate parameters
-./services/alerts/CBDCALERT001.ts:    timezone: string = ""; // TODO: Enum?
-./services/alerts/CBDCALERT001.ts:        // TODO: Validate parameters
-./services/xrpl.ts:    return details; // TODO: type
-```
-
-##  agenda
-
-**issues**
-CBDCALERT001: Check issuer trustlines #26
-Define CBDCAlert001.test.ts
-
-1.  Test user interface for monitoring
-2.  Outline for project presentation 
-
-# agenda
-
-1.  Use cron package with momentjs to format enum Timezone values. for Enumerate TimeZones for CBDCALERT00{1, 2, 3, 4} #10
-2.  Comment process/src/services/alerts/CBDCALERT004.ts && 005 && 006.ts
-3.  Resolve PR for 7-cbdcalert001-class-comments and close issue
-4.  1301 files have been changed under the contribute branch, I'll be combing through the Class Diagram to see what new issues I can address through comments made by Javier
-5.  Prepare source code for tomorrows meeting over creating an account to an issuer requiring an AuthTrustline and then freeze the account
-6.  Work with `morgan_cbdc_test` to test trustlines
-
-
-```
 ❯ ./rippled --conf ../cfg/rippled-reporting.cfg
 Loading: "../cfg/rippled-reporting.cfg"
 libc++abi: terminating due to uncaught exception of type std::runtime_error: The file specified in [validators_file] does not exist: /opt/rippled-reporting/etc/validators.txt
