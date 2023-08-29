@@ -1,4 +1,4 @@
-#  intern guide 
+#  xrpl docs
 
 ###  to do list
 
