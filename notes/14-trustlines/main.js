@@ -1,22 +1,4 @@
 "use strict";
-/**
- * @author                      Morgan Bergen <mbergen@ripple.com>
- * @file                        main.ts
- * @overview
- * @tutorial                    main.ts in the terminal call tsc main.ts, then call node main.js, and the console output will be returned
- * @overview                    This module implement account creation on the testnet using websockets
- *                              Sets the account authorization requirement with SetFlag: AccountSetAsfFlags.asfRequireAuth
- *                              Initializes a trustline to the issuer "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59"
- *
- * @todo                        Implement a function analagous to set_require_auth to freeze the newly created account
- * @function                    create_account
- * @function                    set_require_auth
- * @function                    create_trustline
- * @function                    account_info
- *
- * https://dcm.ripplesandbox.com/wallet/rDZkpBiYiDJtbAQz3c1WEBmip6c23AVAZT
- *
- */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -55,16 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var xrpl_1 = require("xrpl");
-/**
- * @function                    main
- * @summary                     The main asynchronous function that implements the account creation, setting the account authorization requirement,
- *                              and creation of a trustline to an issuer on the testnet
- * @returns {Promise<number>}   A promise that resolves with 0, indicating a successful execution
- *
- * @description                 This function initializes a client connection to the XRPL, gets a new wallet, sets account authorization requirement,
- *                              creates a trustline to an issuer, and finally returns 0 to indicate successful execution.
- *                              If there is an error during this process, the error will be thrown and has yet to be caught and handled by the main calling.
- */
 function main() {
     return __awaiter(this, void 0, void 0, function () {
         var p_client, wallet, p_limit, p_currency, p_issuer, p_flags;
@@ -84,21 +56,12 @@ function main() {
                     return [4 /*yield*/, set_require_auth(p_client, wallet)];
                 case 3:
                     _a.sent();
-                    create_trustline(p_client, wallet, p_limit, p_currency, 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59', p_flags);
+                    create_trustline(p_client, wallet, p_limit, p_currency, '', p_flags);
                     return [2 /*return*/, (0)];
             }
         });
     });
 }
-/**
- * @function                    create_account
- * @summary                     Connects to the XRP TestNet, creates a new wallet and funds it. Prints out wallet info and account info to the console.
- * @returns {Promise<Wallet>}   The wallet that has been created and funded.
- *
- * @description                 The function creates a new client connected to the XRP TestNet, creates a new wallet, funds it and disconnects the client.
- *                              It then retrieves the account info related to the wallet and prints it.
- *                              It finally returns the wallet objec.
- */
 function create_account() {
     return __awaiter(this, void 0, void 0, function () {
         var client, wallet, message;
@@ -133,19 +96,6 @@ function create_account() {
         });
     });
 }
-/**
- * @function                set_require_auth
- * @summary                 An asynchronous function that sets the requireAuth flag for an XRPL account.
- * @param {Client}          client The Client object to interact with the XRPL.
- * @param {Wallet}          wallet The Wallet object containing the account details.
- * @returns {Promise<void>} A promise that resolves when the requireAuth flag has been set.
- *
- * @description             This function connects to the XRPL, prepares and signs a transaction to set the requireAuth flag for the account,
- *                          and submits the transaction.
- *                          If the transaction is not successful, an error message is printed to the console and 1 is returned indicated failure.
- *                          If it is successful, the function waits for a certain period of time before retrieving and printing the transaction details.
- *                          It then retrieves and prints the updated account information and finally disconnects from the testnet.
- */
 function set_require_auth(client, wallet) {
     return __awaiter(this, void 0, void 0, function () {
         var account_set, tx_prepared, tx_signed, tx_result, tx_hash, tx_request, tx_response, message;
@@ -157,17 +107,22 @@ function set_require_auth(client, wallet) {
                     account_set = {
                         TransactionType: "AccountSet",
                         Account: wallet.classicAddress,
-                        SetFlag: xrpl_1.AccountSetAsfFlags.asfRequireAuth,
+                        //SetFlag: AccountSetAsfFlags.asfRequireAuth,
                         //SetFlag: AccountSetAsfFlags.asfDisallowIncomingTrustline,
-                        ClearFlag: 0
+                        //ClearFlag: 0 
                     };
-                    console.log(typeof xrpl_1.AccountSetAsfFlags.asfDisallowIncomingTrustline);
+                    //console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
+                    console.log("".concat(typeof , " ").concat(account_set));
                     return [4 /*yield*/, client.autofill(account_set)];
                 case 2:
                     tx_prepared = _a.sent();
+                    client.disconnect();
                     tx_signed = wallet.sign(tx_prepared);
-                    return [4 /*yield*/, client.submit(tx_signed.tx_blob)];
+                    return [4 /*yield*/, client.connect()];
                 case 3:
+                    _a.sent();
+                    return [4 /*yield*/, client.submit(tx_signed.tx_blob)];
+                case 4:
                     tx_result = _a.sent();
                     if (tx_result.result.engine_result !== 'tesSUCCESS') {
                         console.log("---------------------------------------Account Set Failed Response---------------------------------------");
@@ -178,10 +133,10 @@ function set_require_auth(client, wallet) {
                         return [2 /*return*/, (1)];
                     }
                     return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 5000); })];
-                case 4:
+                case 5:
                     _a.sent();
                     return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, 4000); })];
-                case 5:
+                case 6:
                     _a.sent();
                     tx_hash = tx_result.result.tx_json.hash;
                     tx_request = {
@@ -189,7 +144,7 @@ function set_require_auth(client, wallet) {
                         transaction: tx_hash
                     };
                     return [4 /*yield*/, client.request(tx_request)];
-                case 6:
+                case 7:
                     tx_response = _a.sent();
                     console.log("---------------------------------------Account Set Response---------------------------------------");
                     console.log(tx_response);
@@ -203,7 +158,7 @@ function set_require_auth(client, wallet) {
                             "ledger_index": "validated",
                             "api_version": 1
                         })];
-                case 7:
+                case 8:
                     message = _a.sent();
                     console.log(message);
                     client.disconnect();
@@ -292,7 +247,7 @@ function create_trustline(client, wallet, limit, currency, issuer, flags) {
  * @returns {Promise<string>}   A promise that resolves with the account's address as a string.
  *
  * @description                 This function connects to the testnet, sends a request to retrieve the account information of a
- *                              issuer account (r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59), and logs the response to the console.
+ *                              issuer account (), and logs the response to the console.
  *                              Finally disconnects the client and returns the account's address as a string.
  *                              If there is an error during this process, the error is catched and console logged.
  */
@@ -312,7 +267,7 @@ function account_info() {
                     return [4 /*yield*/, client.request({
                             "id": 2,
                             "command": "account_info",
-                            "account": "r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59",
+                            "account": "",
                             "strict": true,
                             "ledger_index": "validated",
                             "api_version": 1
