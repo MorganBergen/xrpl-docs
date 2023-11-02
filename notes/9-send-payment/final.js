@@ -27,7 +27,6 @@ async function main() {
         "Amount": xrpl.xrpToDrops("22"),
         "Destination": "rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe"
     })
-
     console.log("\n")
     console.log("\n")
     console.log("\n")
