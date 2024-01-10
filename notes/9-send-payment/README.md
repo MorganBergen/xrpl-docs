@@ -54,7 +54,81 @@ Please note, to interact with a rippled server via WebSocket, you need the serve
 
 Trust lines in the XRP Ledger represent an issuer's obligation to redeem an IOU for an account. In simpler terms, they define the limits at which one account trusts another to owe it money. Trust lines can only be established if the account on the receiving end of the trust line explicitly agrees to it, which is a key feature of the XRP Ledger's trust system.
 
+##  compiled output upon `node final.js`
 
+```
+❯ node final.js
+wallet
+
+Wallet {
+  publicKey: '039543A0D3004CDA0904A09FB3710251C652D69EA338589279BC849D47A7B019A1',
+  privateKey: '009A8559713F87414EEB019C2BDFF98EA9FB85039661E30D06415C2E4C9E086DED',
+  classicAddress: 'rMCcNuTcajgw7YTgBy1sys3b89QqjUrMpH',
+  seed: 'sn3nxiW7v8KXzPzAqzyHXbSSKNuN9'
+}
+Connecting to Testnet...
+Getting a wallet from the Testnet faucet...
+
+
+
+
+
+
+{
+  TransactionType: 'Payment',
+  Account: 'rpxvTFhZyACP17paSAux2S1rQ5XGKi4zVg',
+  Amount: '22000000',
+  Destination: 'rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe',
+  Flags: 0,
+  NetworkID: undefined,
+  Sequence: 44436823,
+  Fee: '12',
+  LastLedgerSequence: 44436843
+}
+
+
+
+
+Prepared transaction instructions: {
+  TransactionType: 'Payment',
+  Account: 'rpxvTFhZyACP17paSAux2S1rQ5XGKi4zVg',
+  Amount: '22000000',
+  Destination: 'rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe',
+  Flags: 0,
+  NetworkID: undefined,
+  Sequence: 44436823,
+  Fee: '12',
+  LastLedgerSequence: 44436843
+}
+Transaction cost: 0.000012 XRP
+Transaction expires after ledger: 44436843
+Identifying hash: 13358F33EF27DF15FBADF338E12364ECB46797E61E1D76C4AB4E6692FC767077
+Signed blob: 12000022000000002402A60D57201B02A60D6B6140000000014FB18068400000000000000C7321ED76F22F3DE8E390BC7D6DE43CF63D1D372A615CC7523BBB5D006981463F5258A974407A329AF63445B704361FE10EF039E224463EFFA018BD1CCC132BB951469F260982C25AD5A92A841678E7DC07181B18E845D15FCD269E206F80DBB729864EF30A8114158BA1B952F198E7690C766831E6F38DD071B3468314F667B0CA50CC7709A220B0561B85E53A48461FA8
+Transaction result: tesSUCCESS
+Balance changes: [
+  {
+    "account": "rPT1Sjq2YGrBMTttX4GZHjKu9dyfzbpAYe",
+    "balances": [
+      {
+        "currency": "XRP",
+        "value": "22"
+      }
+    ]
+  },
+  {
+    "account": "rpxvTFhZyACP17paSAux2S1rQ5XGKi4zVg",
+    "balances": [
+      {
+        "currency": "XRP",
+        "value": "-22.000012"
+      }
+    ]
+  }
+]
+
+~/Documents/GitHub/xrpl-docs/notes/9-send-payment main !2 ?1                             14s 10:14:09 AM
+❯
+```
 
 
 
