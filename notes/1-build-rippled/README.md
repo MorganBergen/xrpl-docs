@@ -51,12 +51,12 @@ Memory: 2026MiB / 16384MiB
 4.  [`CMakeLists.txt`](##cmakelists-txt)
 5.  [install conan with pip](#install-conan-with-pip)
 6.  [getting-started](#getting-started)
-[problem](#problem)
+7.  [problem](#problem)
 
 ###  cmake
 
 cmake is a meta-build tool for generating makefiles based on platform specific parameters.
-cmake is a tool to control the softwares compilation process using simple platform and compiler independent configuration files, and generate native `makefiles` and workspaces taht can be used in the compiler enviroment of your choice.
+cmake is a tool to control the softwares compilation process using simple platform and compiler independent configuration files, and generate native `makefiles` and workspaces that can be used in the compiler enviroment of your choice.
 
 cmake is an extensible, system that manages the build process in an operating system and in a compiler-independent manner.  unlike many cross-platform systems, cmake is deisgned to be used in conjunction with the native build enviroment.  simple configuration files placed in each source directory is called `CMakeList.txt` are used to generate standard build files e.g. `makefiles` on unix.
 
@@ -101,7 +101,6 @@ for some of these parameters, like the build system and compiler, cmake goes thr
 you can pass every parameter to cmake on the command line, but writing out these parameters everytime we want to configure cmake is a pain.  once you configure a file once cmake can read everytime it is configured, which is a toolchain file.
 
 a toolchain is a set of utilities to compile, link libraries, and creat archives, and other tasks to drive the build.  the toolchain utilities available are determined by the languages enabled.
-
 
 ####  `CMakeLists.txt` 
 
