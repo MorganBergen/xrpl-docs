@@ -4,7 +4,6 @@ async function main() {
 
     const p_client = new Client ('wss://s.altnet.rippletest.net:51233/');
     const { wallet } = await create_account();
-
     const p_limit = '100';
     const p_currency = 'PSC';
     const p_issuer = await account_info();
@@ -61,7 +60,10 @@ async function set_require_auth(client: Client, wallet: Wallet) {
     };
 
     //console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
-    console.log(`${typeof} ${account_set}`);
+    // console.log(`${typeof} ${account_set}`);
+
+    console.log(`${typeof account_set} ${account_set}`);
+
 
     const tx_prepared = await client.autofill(account_set);
 
@@ -228,7 +230,6 @@ async function account_info() {
     }
 }
 
-
 main();
 
 async function issuer_set() {
@@ -237,6 +238,7 @@ async function issuer_set() {
     const issuer = wallet;
     await set_require_auth(p_client, issuer);
     return (wallet);
+
 }
 
 async function requester_set() {

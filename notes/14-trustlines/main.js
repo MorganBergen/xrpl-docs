@@ -112,7 +112,8 @@ function set_require_auth(client, wallet) {
                         //ClearFlag: 0 
                     };
                     //console.log(typeof AccountSetAsfFlags.asfDisallowIncomingTrustline);
-                    console.log("".concat(typeof , " ").concat(account_set));
+                    // console.log(`${typeof} ${account_set}`);
+                    console.log("".concat(typeof account_set, " ").concat(account_set));
                     return [4 /*yield*/, client.autofill(account_set)];
                 case 2:
                     tx_prepared = _a.sent();
