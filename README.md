@@ -9,6 +9,13 @@
 -  [ ] [trust lines and issuing](https://xrpl.org/trust-lines-and-issuing.html)
 -  [ ] [monitor incoming payments](https://xrpl.org/monitor-incoming-payments-with-websocket.html)
 
+-  [ ] Managing keys & creating test credentials (Wallet && Client.fundWallet())
+-  [ ] Submitting transactions to the XRP Ledger (Client.submit(...) & transaction types)
+-  [ ] sending requests to observe the ledger (client.request(...) using public api methods)
+-  [ ] Subscribing to changes in the ledger (Ex. ledger, transactions, & more...)
+-  [ ] Parsing ledger data into more convenient formats (xrpToDrops and rippleTimeToISOTime)
+
+
 ```
 ❯ ./rippled --conf ../cfg/rippled-reporting.cfg
 Loading: "../cfg/rippled-reporting.cfg"
