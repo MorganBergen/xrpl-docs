@@ -1,6 +1,4 @@
-#  xrpl docs
-
-###  to do list
+#  xrp ledger augmented documentation 
 
 -  [x] [build rippled](./src/build-rippled/macos/README.md)
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
@@ -14,19 +12,10 @@
 -  [ ] sending requests to observe the ledger (client.request(...) using public api methods)
 -  [ ] Subscribing to changes in the ledger (Ex. ledger, transactions, & more...)
 -  [ ] Parsing ledger data into more convenient formats (xrpToDrops and rippleTimeToISOTime)
-
-
-```
-❯ ./rippled --conf ../cfg/rippled-reporting.cfg
-Loading: "../cfg/rippled-reporting.cfg"
-libc++abi: terminating due to uncaught exception of type std::runtime_error: The file specified in [validators_file] does not exist: /opt/rippled-reporting/etc/validators.txt
-[1]    5614 abort      ./rippled --conf ../cfg/rippled-reporting.cfg
-```
-
--  [ ] still need to schedule a meeting with Ross Edwards
 -  [ ] [Setup private XRPL network](https://ripplelabs.atlassian.net/wiki/spaces/RIPD/pages/2728100754/Setup+private+XRPL+network)
 -  [ ] [resolve error](https://preview.redoc.ly/dcm-docs/xbs-1822-private-ledger/dcm/admin/private-network/quickstart/)
 -  [ ] [input license and enter into package.json]()
+
 
 ### selected readings
 
@@ -54,3 +43,9 @@ libc++abi: terminating due to uncaught exception of type std::runtime_error: The
 - [XRP Overview](#xrp-overview)
 - [xrpl documentation](https://xrpl.org/docs-index.html)
 
+```
+❯ ./rippled --conf ../cfg/rippled-reporting.cfg
+Loading: "../cfg/rippled-reporting.cfg"
+libc++abi: terminating due to uncaught exception of type std::runtime_error: The file specified in [validators_file] does not exist: /opt/rippled-reporting/etc/validators.txt
+[1]    5614 abort      ./rippled --conf ../cfg/rippled-reporting.cfg
+```
