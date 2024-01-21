@@ -1,12 +1,9 @@
-/*
- * get started
- */
-
 const xrpl = require('xrpl')
 
 async function main() {
     
     const api = new xrpl.Client('wss://xrplcluster.com/') 
+
     await api.connect();
 
     let response = await api.request({
@@ -16,6 +13,8 @@ async function main() {
     });
     
     console.log(response);
+
+    await api.disconnect();
 }
 
 main();

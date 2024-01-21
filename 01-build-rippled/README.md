@@ -7,8 +7,8 @@
 2.  [`rippled/BUILD.md`](https://github.com/XRPLF/rippled/blob/master/BUILD.md#a-crash-course-in-cmake-and-conan)
 
 - [x] `./rippled --unittest`
-- [ ] `./rippled --conf testnet_rippled.cfg`
-- [ ] `./rippled server_info --conf testnet_rippled.cfg`
+- [x] `./rippled --conf testnet_rippled.cfg`
+- [x] `./rippled server_info --conf testnet_rippled.cfg`
 
 ```
 ❯ ps aux | grep rippled

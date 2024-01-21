@@ -6,3 +6,5 @@ export const serverInfo = async () => {
         clinet.disconnected;
     }
 }
+
+main();
