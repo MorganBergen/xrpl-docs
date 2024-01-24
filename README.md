@@ -1,6 +1,6 @@
 #  xrp ledger augmented documentation 
 
--  [x] [build rippled](./src/build-rippled/macos/README.md)
+-  [x] [build rippled](./src/build-rippled/macos/README.md
 -  [x] [pull request from found bug on rippled](./src/build-rippled/macos/PR.md)
 -  [x] [dev containers](https://www.youtube.com/watch?v=SDa3v4Quj7Y)
 -  [x] [Payment System Basics](#payment-system-basics)
