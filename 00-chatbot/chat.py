@@ -1,7 +1,7 @@
 '''
     @Author:        Morgan Bergen
     @Date:          2022-08-02 07:58:00
-    @Description:   query with langchains LLM via command line interface.
+    @Description:   query with langchains interaction with openai's LLM via command line interface.
     
     @Goal:
 
