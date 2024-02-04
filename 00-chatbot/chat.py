@@ -1,11 +1,11 @@
 '''
-    @Author: Morgan Bergen
-    @Date: 2022-08-02 07:58:00
-    @Description: Chat with GPT-3 via command line interface.
+    @Author:        Morgan Bergen
+    @Date:          2022-08-02 07:58:00
+    @Description:   query with langchains LLM via command line interface.
     
-    @goal
+    @Goal:
 
-    is to eventually have a chatbot that can be used into a discord bot
+    Is to eventually have a chatbot that can be used into a discord bot
     currently we have src/index.js which contains this functionality
 
     require('dotenv').config();
@@ -66,6 +66,3 @@ loader = TextLoader('data.txt');
 index = VectorstoreIndexCreator().from_loaders([loader])
 
 print(index.query(query))
-
-
-
