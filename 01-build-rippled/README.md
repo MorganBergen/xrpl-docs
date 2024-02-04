@@ -431,7 +431,6 @@ tools.build:compiler_executables={'c': '/usr/bin/gcc', 'cpp': '/usr/bin/g++'}`
 
 -----------------------------------------------------------
 
-
 ```
 brew uninstall conan@1
 brew install https://raw.githubusercontent.com/homebrew/homebrew-core/1fc9e09956a2aa5ee2f2f4f6c81e359c232dee0f/formula/conan.rb
@@ -448,6 +447,8 @@ Conan version 1.59.0
 
 boost version needs to be 1.77.0
 ```
+
+#  `35 WARNINGS` & `1 ERROR` example
 
 ```
 35 warnings and 1 error generated.
