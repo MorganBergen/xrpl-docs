@@ -47,11 +47,9 @@ async function main() {
     const signed = morgan_wallet.wallet.sign(unsigned_transaction)
     const tx = await client.submitAndWait(signed.tx_blob)
 
-
     //  check the transaction results
     console.log(tx.result.meta.TransactionResult)
     console.log(tx)
-
 
     // disconnect
     client.disconnect()

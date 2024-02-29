@@ -74,8 +74,6 @@ Getting a wallet from the Testnet faucet...
 
 
 
-
-
 {
   TransactionType: 'Payment',
   Account: 'rpxvTFhZyACP17paSAux2S1rQ5XGKi4zVg',
