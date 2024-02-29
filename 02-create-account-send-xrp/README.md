@@ -14,3 +14,26 @@ get accounts from seeds -> standby account & operational account
 | `amount`         |                 |                     |
 | `destination`    |                 |                     |
 
+```javascript
+const xrpl = require('xrpl');
+
+async function main() {
+
+    const client = new xrpl.Client("wss://s.altnet.rippletest.net.51233");
+
+    await client.connect();
+
+    const response = await client.request({
+        "command": "account_info".
+        "account": "address",
+        "ledger_index": "validated"
+    )};
+
+    console.log(response, "response");
+
+    client.disconnect();
+
+}
+
+main();
+```

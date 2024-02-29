@@ -10,6 +10,7 @@ import { Client, LedgerEntry } from "xrpl";
 async function main() {
 
     const client = new Client ('wss://s1.ripple.com/');
+
     await client.connect();
     
     const message = await client.request({
@@ -20,8 +21,8 @@ async function main() {
 
     console.log(message);
 
-
     client.disconnect();
+
     return(0);
 }
 
