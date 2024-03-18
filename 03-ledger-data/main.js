@@ -47,7 +47,7 @@ var serverInfo = function () { return __awaiter(void 0, void 0, void 0, function
             case 1:
                 _a.sent();
                 if (client.isConnected()) {
-                    console.log("testing commit");
+                    console.log("testing if connected");
                     clinet.disconnected;
                 }
                 return [2 /*return*/];
