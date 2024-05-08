@@ -15,10 +15,13 @@ Automtaed market makers are systems that let you exchange assets without needing
 
 #### How do AMMs work?
 
-At 
+At its heart, an AMM works by pooling two tokens together in a pair of liquidity pools.  Oncce enough currency is pooled together, the AMM automatically picks a fiar exchange rate bwteen the different currencies.  AMM's figure out the fair exchange rate with a powerful formula called a "constant function formula" which tries to model the price that a traditional market would discover on its own.  Liquidity pools are handy for two reasons.  First, because the prices are chosen automatically, everyday token holders can contirbute without having to know what a "fair" exchange rate is.  They're also useful because they can provide constant liquidity as the pool is always willing to trade.  Think of it like the exchnage rate that is always available at your bank.
 
 #### Automated pricing and continuous trading
-[Content about pricing and trading mechanisms]
+
+As people trade within the pool, the AMM's algorithm adjusts the prices of the assets to keep everything in balance.  If one asset is in high demand, its price goes up, an dthe other asset's price drops.  This algoirthm uses the constant function formula to keep things in balance.  
+
+1.  Sets a price that follows supply and demand 
 
 #### How does the XRPL order book differ from a typical AMM?
 [Content about XRPL order books]
